@@ -4,7 +4,7 @@ import (
     "testing"
     "math/rand"
     "time"
-    //"fmt"
+    "fmt"
 )
 
 func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
@@ -13,7 +13,7 @@ func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
     if withCapacity > 0 {
         capacity = withCapacity
     } else {
-        capacity = getRandIntn(0)
+        capacity = getRandIntn(50)
     }
 
     newList := &LinkedList{ nil, nil, 0 }
@@ -31,12 +31,12 @@ func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
 }
 
 func getRandIntn(max int) int {
-    rand.Seed(time.Now().UnixNano())
     if max == 0 {
-        return rand.Intn(50)
-    } else {
-        return rand.Intn(max)
+        return max
     }
+
+    rand.Seed(time.Now().UnixNano())
+    return rand.Intn(max)
 }
 
 func TestSize(t *testing.T) {
@@ -134,6 +134,37 @@ func TestInsertBefore(t *testing.T) {
             if !addSuccess {
                 t.Errorf("tried idx %d with list size %d Prev %p: %+v\nCurr %p: %+v\nNext %p: %+v", randIdx, newList.Size(), prev, prev, currItem, currItem, next, next)
             }
+        }
+    }
+}
+
+func getDerivedVal(el interface{}) interface{} {
+    switch t := el.(type) {
+        case string:
+            return el.(string)+"changessssss"
+        case int:
+            return el.(int)*3
+        default:
+            // had to include this because of t...
+            fmt.Println(t)
+            return nil
+    }
+}
+
+func TestSet(t *testing.T) {
+    for iterations := 1; iterations <= 100; iterations++ {
+        newList, _ := makeLinkedList(0, true)
+        if newList.Size() == 0 {
+            continue
+        }
+
+        randIdx := getRandIntn(newList.Size()-1)
+        currNode := newList.GetNth(randIdx)
+        newVal := getDerivedVal(currNode.data)
+        oldVal := newList.Set(randIdx, newVal)
+
+        if oldVal == currNode.data || currNode.data != newVal {
+            t.Errorf("Did not set %v properly oldVal %v, currNode%+v", newVal, oldVal, currNode)
         }
     }
 }

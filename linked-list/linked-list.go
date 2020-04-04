@@ -7,6 +7,7 @@ type MyLinkedList interface {
     GetNth(i int) *Node
     Add(el interface{}) bool
     InsertBefore(i int, el interface{}) bool
+    Set(i int, el interface{}) interface{}
 }
 
 type Node struct {
@@ -117,6 +118,22 @@ func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
 
     l.size++
     return true
+}
+
+func (l *LinkedList) Set(i int, el interface{}) interface{} {
+    var oldVal interface{}
+    // do i need to panic instead ??
+    if IsNil(el) {
+        return nil
+    }
+
+    currNode := l.GetNth(i)
+    if currNode != nil {
+        oldVal = currNode.data
+        currNode.data = el
+    }
+
+    return oldVal
 }
 
 func (l *LinkedList) PrintList() {
