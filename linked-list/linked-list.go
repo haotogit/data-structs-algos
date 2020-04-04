@@ -1,6 +1,9 @@
 package linkedList
 
-import "fmt"
+import (
+    "fmt"
+    "../util"
+)
 
 type MyLinkedList interface {
     Size() int
@@ -14,12 +17,12 @@ type MyLinkedList interface {
 type Node struct {
     prev *Node
     next *Node
-    data interface{}
+    Data interface{}
 }
 
 type LinkedList struct {
-    head *Node
-    tail *Node
+    Head *Node
+    Tail *Node
     size int
 }
 
@@ -49,7 +52,7 @@ func (l *LinkedList) GetNth(i int) *Node {
         return nil
     }
 
-    target := l.head;
+    target := l.Head;
     for i > 0 && target != nil && target.next != nil {
         target = target.next
         i--
@@ -64,18 +67,18 @@ func (l *LinkedList) Add(el interface{}) bool {
         return false
     }
         
-    if l.head == nil {
-        l.head = &Node{nil, nil, el}
+    if l.Head == nil {
+        l.Head = &Node{nil, nil, el}
     } else {
-        if l.tail == nil {
-            temp = l.head
+        if l.Tail == nil {
+            temp = l.Head
         } else {
-            temp = l.tail
+            temp = l.Tail
         }
 
-        l.tail = &Node{temp, nil, el}
-        l.tail.prev = temp
-        temp.next = l.tail
+        l.Tail = &Node{temp, nil, el}
+        l.Tail.prev = temp
+        temp.next = l.Tail
     }
 
     l.size++
@@ -95,7 +98,6 @@ func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
     }
 
     curr := l.GetNth(i)
-        
     if curr != nil {
         prev = curr.prev
         newNode = &Node{prev, curr, el}
@@ -106,14 +108,27 @@ func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
         }
 
         if i == 0 {
-            l.head = newNode
+            l.Head = newNode
+        }
+
+        if i == l.Size()-1 {
+            l.Tail = curr
         }
     } else if i == l.Size() {
         //adding at the end of list
-        prev = l.tail
-        newNode = &Node{prev, nil, el}
-        prev.next = newNode
-        l.tail = newNode
+        if i == 0 {
+            newNode = &Node{nil, nil, el}
+            l.Head = newNode
+        } else {
+            if l.Tail != nil {
+                prev = l.Tail
+            } else {
+                prev = l.Head
+            }
+            newNode = &Node{prev, nil, el}
+            prev.next = newNode
+            l.Tail = newNode
+        }
     }
 
     l.size++
@@ -132,8 +147,8 @@ func (l *LinkedList) Set(i int, el interface{}) interface{} {
         return nil
     }
 
-    oldVal = currNode.data
-    currNode.data = el
+    oldVal = currNode.Data
+    currNode.Data = el
     return oldVal
 }
 
@@ -149,25 +164,45 @@ func (l *LinkedList) Remove(i int) interface{} {
 
     if prev != nil {
         prev.next = next
+    } else {
+        next.prev = nil
+        l.Head = next
     }
 
     if next != nil {
         next.prev = prev
+    } else {
+        prev.next = nil
+        l.Tail = prev
     }
 
     l.size--
-    return currNode.data
+    return currNode.Data
+}
+
+func (l *LinkedList) FillList(capacity int) {
+    var withCap int
+    if capacity > 0 {
+        withCap = capacity
+    } else {
+        withCap = util.GetRandIntn(100) + 25
+    }
+
+    for withCap > 0 {
+        l.Add(util.GetRandIntn(1000)+15)
+        withCap--
+    }
 }
 
 func (l *LinkedList) PrintList() {
-    target := l.head;
+    target := l.Head;
     fmt.Printf("head==== %p %+v\n", target, target)
     target = target.next
     for target != nil {
         fmt.Printf("==== %p %+v\n", target, target)
         target = target.next
     }
-    fmt.Printf("tail==== %p %+v\n", l.tail, l.tail)
+    fmt.Printf("tail==== %p %+v\n", l.Tail, l.Tail)
     //fmt.Printf("==== %p %+v\n", target, target)
     fmt.Println("======================== -- =============================")
 }
