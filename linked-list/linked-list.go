@@ -6,30 +6,7 @@ type MyLinkedList interface {
     Size() int
     GetNth(i int) *Node
     Add(el interface{}) bool
-    AddAtI(i int, el interface{})
-    //Set(i int, el)
-    //Remove(i int, el)
-    //Clear()
-
-    // TODO getNth(i)
-    // params
-    // i - index for desired element
-    // return nth node
-
-    // TODO get(i)
-    // i - index for desired element
-    // return element
-
-    // TODO set(i, el)
-    // set el to ith position in list
-
-    // TODO remove(i, el)
-    // set el to ith position in list
-
-    // TODO clear()
-    // remove all items from list
-
-    // TODO iterator
+    AddAtI(i int, el interface{}) bool
 }
 
 type Node struct {
@@ -48,7 +25,8 @@ func (l *LinkedList) Size() int {
     return l.size 
 }
 
-func isNil(el interface{}) interface{} {
+// TODO TEST THIS
+func IsNil(el interface{}) bool {
     var nilVal interface{}
     switch t := el.(type) {
         case string:
@@ -61,12 +39,17 @@ func isNil(el interface{}) interface{} {
             nilVal = nil
     }
 
-    return nilVal
+    return nilVal == el
 }
 
+// returns pointer to the value of Node
 func (l *LinkedList) GetNth(i int) *Node {
+    if i < 0 || i >= l.Size() {
+        return nil
+    }
+
     target := l.head;
-    for target != nil && i >= 0 && target.next != nil {
+    for i > 0 && target != nil && target.next != nil {
         target = target.next
         i--
     }
@@ -75,32 +58,74 @@ func (l *LinkedList) GetNth(i int) *Node {
 }
 
 func (l *LinkedList) Add(el interface{}) bool {
-    if el == isNil(el) {
+    var temp *Node
+    if IsNil(el) {
         return false
     }
-
+        
     if l.head == nil {
         l.head = &Node{nil, nil, el}
-    } else if l.tail == nil {
-        // why not &l.head
-        l.tail = &Node{l.head, nil, el}
     } else {
-        target := &Node{l.tail, nil, el}
-        l.tail.next = target
+        if l.tail == nil {
+            temp = l.head
+        } else {
+            temp = l.tail
+        }
+
+        l.tail = &Node{temp, nil, el}
+        l.tail.prev = temp
+        temp.next = l.tail
     }
 
     l.size++
     return true
 }
 
-//func (l *LinkedList) AddAtI(i int, el Node) {
-//    // handle null value
-//    // handle increasing capacity
-//    // handle index out of range
-//    l.Add(el)
-//    if i < len(l.list) {
-//        copy(l.list[i+1:], l.list[i:])
-//        l.list[i] = el
-//    }
-//    //l.Add(el)
-//}
+// @params i int: index to insert el
+func (l *LinkedList) AddAtI(i int, el interface{}) bool {
+    if IsNil(el) {
+        return false
+    }
+
+    // handle index out of range
+    if i < 0 || i > l.Size() {
+        return false
+    }
+
+    curr := l.GetNth(i)
+    prev := curr.prev
+    next := curr
+    newNode := &Node{prev, curr, el}
+        fmt.Printf("curr====%+v\n", curr)
+        fmt.Printf("newnode====%+v\n", newNode)
+        fmt.Printf("prev====%+v\n", prev)
+    if prev != nil {
+        prev.next = newNode
+    }
+
+    if next != nil {
+        next.prev = newNode
+    }
+
+    if i == 0 {
+        l.head = newNode
+    } else if l.tail == nil {
+        l.tail = newNode
+    }
+
+    l.size++
+    return true
+}
+
+func (l *LinkedList) PrintList() {
+    target := l.head;
+    fmt.Printf("head==== %p %+v\n", target, target)
+    target = target.next
+    for target != nil {
+        fmt.Printf("==== %p %+v\n", target, target)
+        target = target.next
+    }
+    fmt.Printf("tail==== %p %+v\n", l.tail, l.tail)
+    //fmt.Printf("==== %p %+v\n", target, target)
+    fmt.Println("======================== -- =============================")
+}

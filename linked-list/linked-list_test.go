@@ -4,11 +4,12 @@ import (
     "testing"
     "math/rand"
     "time"
+    //"fmt"
 )
 
 func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
     var capacity int
-    i := 0
+    i := 1
     if withCapacity > 0 {
         capacity = withCapacity
     } else {
@@ -17,14 +18,16 @@ func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
 
     newList := &LinkedList{ nil, nil, 0 }
     if fill {
-        for i < capacity {
+        for capacity > 0 {
             // what happens if past capacity ??
-            newList.Add(Node{nil, nil, i})
-            i++
+            if newList.Add(i) {
+                i++
+            }
+            capacity--
         }
     }
 
-    return newList, i
+    return newList, i-1
 }
 
 func getRandIntn(max int) int {
@@ -46,11 +49,23 @@ func TestSize(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
+    var prev, currItem *Node
+    var validData, validPrev bool
     for iterations := 0; iterations < 100; iterations++ {
-        newList, _ := makeLinkedList(0, false)
-        for i := 1; i < 10; i++ {
-            if !newList.Add(i) {
-                t.Errorf("Failed to add %d\n", i)
+        newList, _ := makeLinkedList(0, true)
+        for i := 0; i < 30; i++ {
+            if newList.Add(i+1) {
+                currItem = newList.GetNth(newList.Size()-1)
+                prev = newList.GetNth(newList.Size()-2)
+
+                if currItem != nil {
+                    validData = currItem.data == i+1
+                    validPrev = currItem.prev == prev
+                }
+
+                if !validData || (prev != nil && !validPrev) {
+                    t.Errorf("prev(%p) %+v, newNode(%p): %+v\n", prev, prev, currItem, currItem)
+                }
             }
         }
     }
@@ -73,7 +88,7 @@ func TestGetNth(t *testing.T) {
         randIdx := getRandIntn(actualSize)
         currItem := newList.GetNth(randIdx)
         target := newList.head
-        for target != nil && randIdx >= 0 && target.next != nil {
+        for target != nil && randIdx > 0 && target.next != nil {
             target = target.next
             randIdx--
         }
@@ -83,3 +98,47 @@ func TestGetNth(t *testing.T) {
         }
     }
 }
+
+//func TestAddAtI(t *testing.T) {
+//    var addSuccess bool
+//    var prev, next *Node
+//    for iterations := 0; iterations < 100; iterations++ {
+//        newList, _ := makeLinkedList(0, true)
+//        randIdx := getRandIntn(newList.Size())
+//        if randIdx > 0 {
+//            prev = newList.GetNth(randIdx-1)
+//        }
+//        
+//        if randIdx <= newList.Size()-1 {
+//            next = newList.GetNth(randIdx+2)
+//        }
+//
+//        if !newList.AddAtI(randIdx, 50*randIdx) {
+//            continue
+//        }
+//
+//        currItem := newList.GetNth(randIdx)
+//        fmt.Printf("adding item %+v at %p index %d\n", currItem, currItem, randIdx)
+//        fmt.Printf("previous %p ========= %+v\n", prev, prev)
+//        fmt.Printf("=========%p %+v\n", currItem, currItem)
+//
+//        // if currItem not nil, with data, with correct previous and next
+//        addSuccess = currItem != (&Node{}) && currItem.data == 50*randIdx &&
+//        currItem.prev == prev && currItem.next == next
+//        
+//        if prev != nil {
+//            addSuccess = currItem == prev.next
+//        }
+//
+//        if next != nil {
+//            addSuccess = currItem == next.prev
+//        }
+//
+//        fmt.Println("---------------------------------")
+//        //newList.PrintList()
+//        if !addSuccess {
+//            t.Errorf("tried idx %d with list size %d Prev %p: %+v\nCurr %p: %+v\nNext %p: %+v", randIdx, newList.Size(), prev, prev, currItem, currItem, next, next)
+//        }
+//        fmt.Println("00000000000000000000000000")
+//    }
+//}
