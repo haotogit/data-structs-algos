@@ -6,7 +6,7 @@ type MyLinkedList interface {
     Size() int
     GetNth(i int) *Node
     Add(el interface{}) bool
-    AddAtI(i int, el interface{}) bool
+    InsertBefore(i int, el interface{}) bool
 }
 
 type Node struct {
@@ -82,7 +82,8 @@ func (l *LinkedList) Add(el interface{}) bool {
 }
 
 // @params i int: index to insert el
-func (l *LinkedList) AddAtI(i int, el interface{}) bool {
+func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
+    var newNode, prev *Node
     if IsNil(el) {
         return false
     }
@@ -93,23 +94,24 @@ func (l *LinkedList) AddAtI(i int, el interface{}) bool {
     }
 
     curr := l.GetNth(i)
-    prev := curr.prev
-    next := curr
-    newNode := &Node{prev, curr, el}
-        fmt.Printf("curr====%+v\n", curr)
-        fmt.Printf("newnode====%+v\n", newNode)
-        fmt.Printf("prev====%+v\n", prev)
-    if prev != nil {
+        
+    if curr != nil {
+        prev = curr.prev
+        newNode = &Node{prev, curr, el}
+        curr.prev = newNode
+
+        if prev != nil {
+            prev.next = newNode
+        }
+
+        if i == 0 {
+            l.head = newNode
+        }
+    } else if i == l.Size() {
+        //adding at the end of list
+        prev = l.tail
+        newNode = &Node{prev, nil, el}
         prev.next = newNode
-    }
-
-    if next != nil {
-        next.prev = newNode
-    }
-
-    if i == 0 {
-        l.head = newNode
-    } else if l.tail == nil {
         l.tail = newNode
     }
 

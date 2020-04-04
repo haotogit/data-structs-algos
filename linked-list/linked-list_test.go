@@ -99,46 +99,41 @@ func TestGetNth(t *testing.T) {
     }
 }
 
-//func TestAddAtI(t *testing.T) {
-//    var addSuccess bool
-//    var prev, next *Node
-//    for iterations := 0; iterations < 100; iterations++ {
-//        newList, _ := makeLinkedList(0, true)
-//        randIdx := getRandIntn(newList.Size())
-//        if randIdx > 0 {
-//            prev = newList.GetNth(randIdx-1)
-//        }
-//        
-//        if randIdx <= newList.Size()-1 {
-//            next = newList.GetNth(randIdx+2)
-//        }
-//
-//        if !newList.AddAtI(randIdx, 50*randIdx) {
-//            continue
-//        }
-//
-//        currItem := newList.GetNth(randIdx)
-//        fmt.Printf("adding item %+v at %p index %d\n", currItem, currItem, randIdx)
-//        fmt.Printf("previous %p ========= %+v\n", prev, prev)
-//        fmt.Printf("=========%p %+v\n", currItem, currItem)
-//
-//        // if currItem not nil, with data, with correct previous and next
-//        addSuccess = currItem != (&Node{}) && currItem.data == 50*randIdx &&
-//        currItem.prev == prev && currItem.next == next
-//        
-//        if prev != nil {
-//            addSuccess = currItem == prev.next
-//        }
-//
-//        if next != nil {
-//            addSuccess = currItem == next.prev
-//        }
-//
-//        fmt.Println("---------------------------------")
-//        //newList.PrintList()
-//        if !addSuccess {
-//            t.Errorf("tried idx %d with list size %d Prev %p: %+v\nCurr %p: %+v\nNext %p: %+v", randIdx, newList.Size(), prev, prev, currItem, currItem, next, next)
-//        }
-//        fmt.Println("00000000000000000000000000")
-//    }
-//}
+func TestInsertBefore(t *testing.T) {
+    var addSuccess bool
+    var prev, next *Node
+    for iterations := 0; iterations < 100; iterations++ {
+        newList, _ := makeLinkedList(0, true)
+        randIdx := getRandIntn(newList.Size())
+
+        if newList.InsertBefore(randIdx, 50*randIdx) {
+            if randIdx > 0 {
+                prev = newList.GetNth(randIdx-1)
+            }
+
+            if randIdx <= newList.Size()-2 {
+                next = newList.GetNth(randIdx+1)
+            }
+
+            currItem := newList.GetNth(randIdx)
+
+            // if currItem not nil, with data, with correct previous and next
+            addSuccess = currItem != nil && currItem.data == 50*randIdx &&
+                currItem.prev == prev && currItem.next == next
+
+            if addSuccess {
+                if prev != nil {
+                    addSuccess = currItem == prev.next
+                }
+
+                if next != nil {
+                    addSuccess = currItem == next.prev
+                }
+            }
+
+            if !addSuccess {
+                t.Errorf("tried idx %d with list size %d Prev %p: %+v\nCurr %p: %+v\nNext %p: %+v", randIdx, newList.Size(), prev, prev, currItem, currItem, next, next)
+            }
+        }
+    }
+}
