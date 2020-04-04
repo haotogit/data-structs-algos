@@ -13,7 +13,7 @@ func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
     if withCapacity > 0 {
         capacity = withCapacity
     } else {
-        capacity = getRandIntn(50)
+        capacity = getRandIntn(100) + 25
     }
 
     newList := &LinkedList{ nil, nil, 0 }
@@ -116,7 +116,6 @@ func TestInsertBefore(t *testing.T) {
             }
 
             currItem := newList.GetNth(randIdx)
-
             // if currItem not nil, with data, with correct previous and next
             addSuccess = currItem != nil && currItem.data == 50*randIdx &&
                 currItem.prev == prev && currItem.next == next
@@ -154,10 +153,6 @@ func getDerivedVal(el interface{}) interface{} {
 func TestSet(t *testing.T) {
     for iterations := 1; iterations <= 100; iterations++ {
         newList, _ := makeLinkedList(0, true)
-        if newList.Size() == 0 {
-            continue
-        }
-
         randIdx := getRandIntn(newList.Size()-1)
         currNode := newList.GetNth(randIdx)
         newVal := getDerivedVal(currNode.data)
@@ -165,6 +160,26 @@ func TestSet(t *testing.T) {
 
         if oldVal == currNode.data || currNode.data != newVal {
             t.Errorf("Did not set %v properly oldVal %v, currNode%+v", newVal, oldVal, currNode)
+        }
+    }
+}
+
+func TestRemove(t *testing.T) {
+    for iterations := 1; iterations <= 100; iterations++ {
+        newList, _ := makeLinkedList(0, true)
+        oldSize := newList.Size()
+        for removals := 0; removals <= newList.Size()/2; removals++ {
+            randIdx := getRandIntn(oldSize-1)
+            currNode := newList.GetNth(randIdx)
+
+            removedItem := newList.Remove(randIdx)
+            newVal := newList.GetNth(randIdx)
+
+            if removedItem != currNode.data || currNode.data == newVal || newList.Size() != oldSize-1 {
+                t.Errorf("Failed to remove at index %d, got %v, newVal %v", randIdx, removedItem, newVal)
+            }
+
+            oldSize--
         }
     }
 }

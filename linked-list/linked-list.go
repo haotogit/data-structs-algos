@@ -8,6 +8,7 @@ type MyLinkedList interface {
     Add(el interface{}) bool
     InsertBefore(i int, el interface{}) bool
     Set(i int, el interface{}) interface{}
+    Remove(i int) interface{}
 }
 
 type Node struct {
@@ -26,7 +27,6 @@ func (l *LinkedList) Size() int {
     return l.size 
 }
 
-// TODO TEST THIS
 func IsNil(el interface{}) bool {
     var nilVal interface{}
     switch t := el.(type) {
@@ -128,12 +128,35 @@ func (l *LinkedList) Set(i int, el interface{}) interface{} {
     }
 
     currNode := l.GetNth(i)
-    if currNode != nil {
-        oldVal = currNode.data
-        currNode.data = el
+    if currNode == nil {
+        return nil
     }
 
+    oldVal = currNode.data
+    currNode.data = el
     return oldVal
+}
+
+func (l *LinkedList) Remove(i int) interface{} {
+    // do i need to panic instead ??
+    currNode := l.GetNth(i)
+    if currNode == nil {
+        return nil
+    }
+
+    prev := l.GetNth(i-1)
+    next := l.GetNth(i+1)
+
+    if prev != nil {
+        prev.next = next
+    }
+
+    if next != nil {
+        next.prev = prev
+    }
+
+    l.size--
+    return currNode.data
 }
 
 func (l *LinkedList) PrintList() {
