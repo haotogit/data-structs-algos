@@ -8,11 +8,13 @@ func TestAddFront(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
         newDeq := NewDeq()
         currVal := iterations*2
+        oldSize := newDeq.Size()
         if newDeq.AddFront(currVal) {
             curr := newDeq.PeekFront()
+            newSize := newDeq.Size()
             
             if curr != currVal {
-               t.Errorf("Expected %v, but got %v", currVal, curr) 
+               t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d", currVal, curr, oldSize, newSize)
             }
         }
     }
@@ -22,11 +24,13 @@ func TestAddBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
         newDeq := NewDeq()
         currVal := iterations*2
+        oldSize := newDeq.Size()
         if newDeq.AddBack(currVal) {
             curr := newDeq.PeekBack()
+            newSize := newDeq.Size()
             
             if curr != currVal {
-               t.Errorf("Expected %v, but got %v", currVal, curr) 
+               t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d", currVal, curr, oldSize, newSize)
             }
         }
     }
@@ -45,13 +49,17 @@ func filledDeq(delta int) *Deq {
 
 func TestRemoveFront(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := filledDeq(iterations)
-        oldTop := newDeq.PeekFront()
-        removed := newDeq.RemoveFront()
-        newVal := newDeq.PeekFront()
+        newDeq := filledDeq(iterations*5)
+        for loops := 0; loops < iterations*5; loops++ {
+            oldTop := newDeq.PeekFront()
+            oldSize := newDeq.Size()
+            removed := newDeq.RemoveFront()
+            newVal := newDeq.PeekFront()
+            newSize := newDeq.Size()
 
-        if removed != oldTop || oldTop == newVal {
-            t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v", removed, oldTop, oldTop, newVal, newVal)
+            if removed != oldTop || newSize == oldSize {
+                t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
+            }
         }
     }
 }
@@ -60,13 +68,17 @@ func TestRemoveFront(t *testing.T) {
 
 func TestRemoveBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := filledDeq(iterations)
-        oldTop := newDeq.PeekBack()
-        removed := newDeq.RemoveBack()
-        newVal := newDeq.PeekBack()
+        newDeq := filledDeq(iterations*5)
+        for loops := 0; loops < iterations*5; loops++ {
+            oldTop := newDeq.PeekBack()
+            oldSize := newDeq.Size()
+            removed := newDeq.RemoveBack()
+            newVal := newDeq.PeekBack()
+            newSize := newDeq.Size()
 
-        if removed != oldTop || oldTop == newVal {
-            t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v", removed, oldTop, oldTop, newVal, newVal)
+            if removed != oldTop || oldTop == newVal {
+                t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
+            }
         }
     }
 }

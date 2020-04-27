@@ -31,6 +31,10 @@ func (s *Stack) Size() int {
     return s.currStack.Size()
 }
 
-func newStack() *Stack {
+func (s *Stack) FillList(size int) {
+    s.currStack.FillList(size)
+}
+
+func NewStack() *Stack {
     return &Stack{ queue.NewDeq() }
 }

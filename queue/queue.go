@@ -4,6 +4,7 @@ type MyQueue interface {
     Enqueue(el interface{}) bool
     Dequeue() interface{}
     Peek() interface{}
+    Size() int
 }
 
 type Queue struct {
