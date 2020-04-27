@@ -6,27 +6,17 @@ import (
 )
 
 func TestEnqueue(t *testing.T) {
-    var b4, after interface{}
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := &Queue{}
+        newQ := NewQ()
         for loops := 0; loops < 10; loops++ {
             random := util.GetRandIntn(loops*3)
-
-            if newQ.Size() > 1 {
-                b4 = newQ.Tail
-            } else if newQ.Head != nil {
-                b4 = newQ.Head
-            }
-
+            oldSize := newQ.Size()
             if newQ.Enqueue(random) {
-                if newQ.Size() > 1 {
-                    after = newQ.Tail
-                } else {
-                    after = newQ.Head
-                }
+                lastItem := newQ.currDeq.PeekBack()
+                newSize := newQ.Size()
 
-                if b4 == after {
-                    t.Errorf("Did not append %v to list last %+v, newlyAdded %+v", random, b4, after)
+                if oldSize == newSize || random != lastItem {
+                    t.Errorf("Did not append %v to list, last item is %v, or size is wrong oldSize %d newSize %d", random, lastItem, oldSize, newSize)
                 }
             }
         }
@@ -36,13 +26,13 @@ func TestEnqueue(t *testing.T) {
 func TestDequeue(t *testing.T) {
     var newHead interface{}
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := &Queue{}
-        newQ.FillList(100)
+        newQ := NewQ()
+        newQ.currDeq.FillList(100)
         for loops := 0; loops < 10; loops++ {
-            oldHead := newQ.Head
+            oldHead := newQ.Peek()
             newHead = newQ.Dequeue()
 
-            if oldHead.Data != newHead {
+            if oldHead != newHead {
                 t.Errorf("Did not remove right data expected %+v, but got %+v", oldHead, newHead)
             }
         }
@@ -51,15 +41,14 @@ func TestDequeue(t *testing.T) {
 
 func TestPeek(t *testing.T) {
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := &Queue{}
-        newQ.FillList(100)
+        newQ := NewQ()
+        newQ.currDeq.FillList(100)
         for loops := 0; loops < 10; loops++ {
-            oldHead := newQ.Peek()
-            oldVal := newQ.Dequeue()
             currFront := newQ.Peek()
+            deqFront := newQ.currDeq.PeekFront()
             
-            if oldHead != oldVal || currFront != newQ.Head.Data {
-                t.Errorf("Not peeking right expected: %+v, got: %v", newQ.Head, currFront)
+            if currFront != deqFront {
+                t.Errorf("Not peeking right expected: %+v, got: %v", deqFront, currFront)
             }
         }
     }

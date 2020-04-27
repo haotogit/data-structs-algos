@@ -32,11 +32,10 @@ func (l *LinkedList) Size() int {
 
 func IsNil(el interface{}) bool {
     var nilVal interface{}
-    switch t := el.(type) {
+    switch el.(type) {
         case string:
             nilVal = ""
             // had to include this because of t...
-            fmt.Println(t)
         case int:
             nilVal = 0
         default:
@@ -164,33 +163,35 @@ func (l *LinkedList) Remove(i int) interface{} {
 
     if prev != nil {
         prev.next = next
-    } else {
-        next.prev = nil
-        l.Head = next
-    }
 
+        if i == l.Size()-1 {
+            l.Tail = prev
+        }
+    }
+    
     if next != nil {
         next.prev = prev
-    } else {
-        prev.next = nil
-        l.Tail = prev
+
+        if i == 0 {
+            l.Head = next
+        }
     }
 
     l.size--
     return currNode.Data
 }
 
-func (l *LinkedList) FillList(capacity int) {
-    var withCap int
-    if capacity > 0 {
-        withCap = capacity
+func (l *LinkedList) FillList(size int) {
+    var withSize int
+    if size > 0 {
+        withSize = size 
     } else {
-        withCap = util.GetRandIntn(100) + 25
+        withSize = util.GetRandIntn(100) + 25
     }
 
-    for withCap > 0 {
+    for withSize > 0 {
         l.Add(util.GetRandIntn(1000)+15)
-        withCap--
+        withSize--
     }
 }
 
@@ -206,3 +207,7 @@ func (l *LinkedList) PrintList() {
     //fmt.Printf("==== %p %+v\n", target, target)
     fmt.Println("======================== -- =============================")
 }
+
+func NewLinkedList() *LinkedList {
+    return &LinkedList{ nil, nil, 0 }
+} 

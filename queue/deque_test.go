@@ -6,13 +6,13 @@ import (
 
 func TestAddFront(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := &Deque{}
+        newDeq := NewDeq()
         currVal := iterations*2
-        if newDeque.AddFront(currVal) {
-            curr := newDeque.GetNth(0)
+        if newDeq.AddFront(currVal) {
+            curr := newDeq.PeekFront()
             
-            if curr.Data != currVal {
-               t.Errorf("Expected %v, but got %v", currVal, curr.Data) 
+            if curr != currVal {
+               t.Errorf("Expected %v, but got %v", currVal, curr) 
             }
         }
     }
@@ -20,37 +20,37 @@ func TestAddFront(t *testing.T) {
 
 func TestAddBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := &Deque{}
+        newDeq := NewDeq()
         currVal := iterations*2
-        if newDeque.AddBack(currVal) {
-            curr := newDeque.GetNth(newDeque.Size()-1)
+        if newDeq.AddBack(currVal) {
+            curr := newDeq.PeekBack()
             
-            if curr.Data != currVal {
-               t.Errorf("Expected %v, but got %v", currVal, curr.Data) 
+            if curr != currVal {
+               t.Errorf("Expected %v, but got %v", currVal, curr) 
             }
         }
     }
 }
 
-func filledDeque(delta int) *Deque {
-    newDeque := &Deque{}
+func filledDeq(delta int) *Deq {
+    newDeq := NewDeq()
     loops := delta+50
     for loops != 0 {
-        newDeque.AddBack(loops)
+        newDeq.AddBack(loops)
         loops--
     }
 
-    return newDeque
+    return newDeq
 }
 
 func TestRemoveFront(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := filledDeque(iterations)
-        oldTop := newDeque.GetNth(0)
-        removed := newDeque.RemoveFront()
-        newVal := newDeque.GetNth(0)
+        newDeq := filledDeq(iterations)
+        oldTop := newDeq.PeekFront()
+        removed := newDeq.RemoveFront()
+        newVal := newDeq.PeekFront()
 
-        if removed != oldTop.Data || oldTop == newVal {
+        if removed != oldTop || oldTop == newVal {
             t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v", removed, oldTop, oldTop, newVal, newVal)
         }
     }
@@ -60,35 +60,35 @@ func TestRemoveFront(t *testing.T) {
 
 func TestRemoveBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := filledDeque(iterations)
-        oldTop := newDeque.GetNth(newDeque.Size()-1)
-        removed := newDeque.RemoveBack()
-        newVal := newDeque.GetNth(newDeque.Size()-1)
+        newDeq := filledDeq(iterations)
+        oldTop := newDeq.PeekBack()
+        removed := newDeq.RemoveBack()
+        newVal := newDeq.PeekBack()
 
-        if removed != oldTop.Data || oldTop == newVal {
+        if removed != oldTop || oldTop == newVal {
             t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v", removed, oldTop, oldTop, newVal, newVal)
         }
     }
 }
 
 func TestPeekFront(t *testing.T) {
+    newDeq := NewDeq()
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := filledDeque(iterations)
-        currTop := newDeque.PeekFront()
-        expected := newDeque.GetNth(0)
-        if currTop !=  expected.Data {
-            t.Errorf("Expected %+v, but got %v", expected, currTop)
+        newDeq.AddFront(iterations)
+        currTop := newDeq.PeekFront()
+        if currTop !=  iterations {
+            t.Errorf("Expected %+v, but got %v", iterations, currTop)
         }
     }
 }
 
 func TestPeekBack(t *testing.T) {
+    newDeq := NewDeq()
     for iterations := 1; iterations < 100; iterations++ {
-        newDeque := filledDeque(iterations)
-        currTail := newDeque.PeekBack()
-        expected := newDeque.GetNth(newDeque.Size()-1)
-        if currTail !=  expected.Data {
-            t.Errorf("Expected %+v, but got %v", expected, currTail)
+        newDeq.AddBack(iterations)
+        currTail := newDeq.PeekBack()
+        if currTail !=  iterations {
+            t.Errorf("Expected %+v, but got %v", iterations, currTail)
         }
     }
 }

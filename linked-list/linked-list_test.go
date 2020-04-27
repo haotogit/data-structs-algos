@@ -2,29 +2,26 @@ package linkedList
 
 import (
     "testing"
-    "math/rand"
-    "time"
-    "fmt"
     "../util"
 )
 
-func makeLinkedList(withCapacity int, fill bool) (*LinkedList, int) {
-    var capacity int
+func makeLinkedList(withSize int, fill bool) (*LinkedList, int) {
+    var currSize int
     i := 1
-    if withCapacity > 0 {
-        capacity = withCapacity
+    if withSize > 0 {
+        currSize = withSize
     } else {
-        capacity = util.GetRandIntn(100) + 25
+        currSize = util.GetRandIntn(100) + 25
     }
 
-    newList := &LinkedList{ nil, nil, 0 }
+    newList := NewLinkedList()
     if fill {
-        for capacity > 0 {
+        for currSize > 0 {
             // what happens if past capacity ??
             if newList.Add(i) {
                 i++
             }
-            capacity--
+            currSize--
         }
     }
 
@@ -130,14 +127,13 @@ func TestInsertBefore(t *testing.T) {
 }
 
 func getDerivedVal(el interface{}) interface{} {
-    switch t := el.(type) {
+    switch el.(type) {
         case string:
             return el.(string)+"changessssss"
         case int:
             return el.(int)*3
         default:
             // had to include this because of t...
-            fmt.Println(t)
             return nil
     }
 }

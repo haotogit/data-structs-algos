@@ -1,24 +1,31 @@
 package queue
 
 type MyQueue interface {
-    MyDeque
     Enqueue(el interface{}) bool
     Dequeue() interface{}
     Peek() interface{}
 }
 
 type Queue struct {
-    Deque
+    currDeq *Deq
 }
 
 func (q *Queue) Enqueue(el interface{}) bool {
-    return q.AddBack(el)
+    return q.currDeq.AddBack(el)
 }
 
 func (q *Queue) Dequeue() interface{} {
-    return q.RemoveFront()
+    return q.currDeq.RemoveFront()
 }
 
 func (q *Queue) Peek() interface{} {
-    return q.PeekFront()
+    return q.currDeq.PeekFront()
+}
+
+func (q *Queue) Size() int {
+    return q.currDeq.Size()
+}
+
+func NewQ() *Queue {
+    return &Queue{ NewDeq() }
 }
