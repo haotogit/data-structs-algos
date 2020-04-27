@@ -9,6 +9,7 @@ type MyStack interface {
     Pop() interface{}
     Peek() interface{}
     Size() int
+    Capacity() int
 }
 
 type Stack struct {
@@ -31,10 +32,10 @@ func (s *Stack) Size() int {
     return s.currStack.Size()
 }
 
-func (s *Stack) FillList(size int) {
-    s.currStack.FillList(size)
+func (s *Stack) Capacity() int {
+    return s.currStack.Capacity()
 }
 
-func NewStack() *Stack {
-    return &Stack{ queue.NewDeq() }
+func NewStack(capacity int) *Stack {
+    return &Stack{ queue.NewDeq(capacity) }
 }

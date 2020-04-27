@@ -7,7 +7,7 @@ import (
 
 func TestEnqueue(t *testing.T) {
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := NewQ()
+        newQ := NewQ(10)
         for loops := 0; loops < 10; loops++ {
             random := util.GetRandIntn(loops*3)
             oldSize := newQ.Size()
@@ -23,10 +23,19 @@ func TestEnqueue(t *testing.T) {
     }
 }
 
+func filledQ(capacity int) *Queue {
+    newQ := NewQ(capacity)
+    for capacity != 0 {
+        newQ.Enqueue(capacity)
+        capacity--
+    }
+
+    return newQ
+}
+
 func TestDequeue(t *testing.T) {
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := NewQ()
-        newQ.currDeq.FillList(10*iterations)
+        newQ := filledQ(iterations+10)
         oldSize := newQ.Size()
         for loops := 0; loops < 10; loops++ {
             oldHead := newQ.Peek()
@@ -42,8 +51,7 @@ func TestDequeue(t *testing.T) {
 
 func TestPeek(t *testing.T) {
     for iterations := 0; iterations < 50; iterations++ {
-        newQ := NewQ()
-        newQ.currDeq.FillList(10*iterations)
+        newQ := filledQ(iterations+10)
         for loops := 0; loops < 10; loops++ {
             currFront := newQ.Peek()
             deqFront := newQ.currDeq.PeekFront()

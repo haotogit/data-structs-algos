@@ -4,9 +4,9 @@ import (
     "testing"
 )
 
-func TestAddFront(t *testing.T) {
+func TestAddFrontLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeq(iterations)
+        newDeq := NewDeqLL(iterations)
         currVal := iterations*2
         oldSize := newDeq.Size()
         if newDeq.AddFront(currVal) {
@@ -20,9 +20,9 @@ func TestAddFront(t *testing.T) {
     }
 }
 
-func TestAddBack(t *testing.T) {
+func TestAddBackLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeq(iterations)
+        newDeq := NewDeqLL(iterations)
         currVal := iterations*2
         oldSize := newDeq.Size()
         if newDeq.AddBack(currVal) {
@@ -36,24 +36,9 @@ func TestAddBack(t *testing.T) {
     }
 }
 
-func TestIncCap(t *testing.T) {
-    for iterations := 1; iterations < 200; iterations++ {
-        newDeq := filledDeq(iterations)
-        if iterations % 2 == 0 {
-            newDeq.AddFront(iterations)
-        } else {
-            newDeq.AddBack(iterations)
-        }
-
-        if newDeq.Capacity() != (iterations+1)*2 {
-            t.Errorf("Did not increase capacity expected %d, but got %d", (iterations+1)*2, newDeq.Capacity())
-        }
-    }
-}
-
-func filledDeq(delta int) *Deq {
-    loops := delta
-    newDeq := NewDeq(loops)
+func filledDeqLL(delta int) *DeqLL {
+    loops := delta+50
+    newDeq := NewDeqLL(loops)
     for loops != 0 {
         newDeq.AddBack(loops)
         loops--
@@ -62,9 +47,9 @@ func filledDeq(delta int) *Deq {
     return newDeq
 }
 
-func TestRemoveFront(t *testing.T) {
+func TestRemoveFrontLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := filledDeq(iterations*5)
+        newDeq := filledDeqLL(iterations*5)
         for loops := 0; loops < iterations*5; loops++ {
             oldTop := newDeq.PeekFront()
             oldSize := newDeq.Size()
@@ -73,7 +58,7 @@ func TestRemoveFront(t *testing.T) {
             newSize := newDeq.Size()
 
             if removed != oldTop || newSize == oldSize {
-                t.Errorf("Did not remove %v oldTop%p %+v, currFront %p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
+                t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
             }
         }
     }
@@ -81,9 +66,9 @@ func TestRemoveFront(t *testing.T) {
 
 
 
-func TestRemoveBack(t *testing.T) {
+func TestRemoveBackLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := filledDeq(iterations*5)
+        newDeq := filledDeqLL(iterations*5)
         for loops := 0; loops < iterations*5; loops++ {
             oldTop := newDeq.PeekBack()
             oldSize := newDeq.Size()
@@ -98,8 +83,8 @@ func TestRemoveBack(t *testing.T) {
     }
 }
 
-func TestPeekFront(t *testing.T) {
-    newDeq := NewDeq(100)
+func TestPeekFrontLL(t *testing.T) {
+    newDeq := NewDeqLL(100)
     for iterations := 1; iterations < 100; iterations++ {
         newDeq.AddFront(iterations)
         currTop := newDeq.PeekFront()
@@ -109,8 +94,8 @@ func TestPeekFront(t *testing.T) {
     }
 }
 
-func TestPeekBack(t *testing.T) {
-    newDeq := NewDeq(100)
+func TestPeekBackLL(t *testing.T) {
+    newDeq := NewDeqLL(100)
     for iterations := 1; iterations < 100; iterations++ {
         newDeq.AddBack(iterations)
         currTail := newDeq.PeekBack()

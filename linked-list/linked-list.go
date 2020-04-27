@@ -30,22 +30,6 @@ func (l *LinkedList) Size() int {
     return l.size 
 }
 
-func IsNil(el interface{}) bool {
-    var nilVal interface{}
-    switch el.(type) {
-        case string:
-            nilVal = ""
-            // had to include this because of t...
-        case int:
-            nilVal = 0
-        default:
-            nilVal = nil
-    }
-
-    return nilVal == el
-}
-
-// returns pointer to the value of Node
 func (l *LinkedList) GetNth(i int) *Node {
     if i < 0 || i >= l.Size() {
         return nil
@@ -62,7 +46,7 @@ func (l *LinkedList) GetNth(i int) *Node {
 
 func (l *LinkedList) Add(el interface{}) bool {
     var temp *Node
-    if IsNil(el) {
+    if util.IsNil(el) {
         return false
     }
         
@@ -87,7 +71,7 @@ func (l *LinkedList) Add(el interface{}) bool {
 // @params i int: index to insert el
 func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
     var newNode, prev *Node
-    if IsNil(el) {
+    if util.IsNil(el) {
         return false
     }
 
@@ -137,7 +121,7 @@ func (l *LinkedList) InsertBefore(i int, el interface{}) bool {
 func (l *LinkedList) Set(i int, el interface{}) interface{} {
     var oldVal interface{}
     // do i need to panic instead ??
-    if IsNil(el) {
+    if util.IsNil(el) {
         return nil
     }
 

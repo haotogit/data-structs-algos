@@ -5,6 +5,7 @@ type MyQueue interface {
     Dequeue() interface{}
     Peek() interface{}
     Size() int
+    Capacity() int
 }
 
 type Queue struct {
@@ -27,6 +28,10 @@ func (q *Queue) Size() int {
     return q.currDeq.Size()
 }
 
-func NewQ() *Queue {
-    return &Queue{ NewDeq() }
+func (q *Queue) Capacity() int {
+    return q.currDeq.Capacity()
+}
+
+func NewQ(capacity int) *Queue {
+    return &Queue{ NewDeq(capacity) }
 }
