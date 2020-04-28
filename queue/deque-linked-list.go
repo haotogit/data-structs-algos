@@ -20,8 +20,6 @@ type MyDeqLL interface {
 
 type DeqLL struct {
     list *linkedList.LinkedList
-    currSize int
-    capacity int
 }
 
 func (d *DeqLL) AddFront(el interface{}) bool {
@@ -30,7 +28,6 @@ func (d *DeqLL) AddFront(el interface{}) bool {
     }
 
     if d.list.InsertBefore(0, el) {
-        d.currSize++
         return true
     } else {
         return false
@@ -43,7 +40,6 @@ func (d *DeqLL) AddBack(el interface{}) bool {
     }
 
     if d.list.Add(el) {
-        d.currSize++
         return true
     } else {
         return false
@@ -51,33 +47,15 @@ func (d *DeqLL) AddBack(el interface{}) bool {
 }
 
 func (d *DeqLL) RemoveFront() interface{} {
-    if d.currSize == 0 {
-        return nil 
-    }
-
-    removed := d.list.Remove(0)
-    if removed != nil {
-        d.currSize--
-    }
-
-    return removed
+    return d.list.Remove(0)
 }
 
 func (d *DeqLL) RemoveBack() interface{} {
-    if d.currSize == 0 {
-        return nil
-    }
-
-    removed := d.list.Remove(d.currSize-1)
-    if removed != nil {
-        d.currSize--
-    }
-
-    return removed
+    return d.list.Remove(d.Size()-1)
 }
 
 func (d *DeqLL) PeekFront() interface{} {
-    if d.currSize == 0 {
+    if d.Size() == 0 {
         return nil
     }
 
@@ -85,21 +63,21 @@ func (d *DeqLL) PeekFront() interface{} {
 }
 
 func (d *DeqLL) PeekBack() interface{} {
-    if d.currSize == 0 {
+    if d.Size() == 0 {
         return nil
     }
 
-    return d.list.GetNth(d.currSize-1).Data
+    return d.list.GetNth(d.Size()-1).Data
 }
 
 func (d *DeqLL) Size() int {
-    return d.currSize
+    return d.list.Size()
 }
 
 func (d *DeqLL) FillList(size int) {
     d.list.FillList(size)
 }
 
-func NewDeqLL(capacity int) *DeqLL {
-    return  &DeqLL{ linkedList.NewLinkedList(), 0, capacity }
+func NewDeqLL() *DeqLL {
+    return  &DeqLL{ linkedList.NewLinkedList() }
 }

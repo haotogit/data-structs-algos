@@ -13,7 +13,7 @@ type MyStack interface {
 }
 
 type Stack struct {
-    currStack *queue.Deq
+    currStack *queue.DeqLL
 }
 
 func (s *Stack) Push(el interface{}) bool {
@@ -32,10 +32,6 @@ func (s *Stack) Size() int {
     return s.currStack.Size()
 }
 
-func (s *Stack) Capacity() int {
-    return s.currStack.Capacity()
-}
-
-func NewStack(capacity int) *Stack {
-    return &Stack{ queue.NewDeq(capacity) }
+func NewStack() *Stack {
+    return &Stack{ queue.NewDeqLL() }
 }

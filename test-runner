@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find . ! -name "*.git" -type d -d 1 -execdir sh -c 'cd {} &&
+testFiles=`find . -iname "*_test.go"` && if [ ${#testFiles} -gt 0 ];then go test; fi' \;

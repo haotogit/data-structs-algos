@@ -6,7 +6,7 @@ import (
 
 func TestAddFrontLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeqLL(iterations)
+        newDeq := NewDeqLL()
         currVal := iterations*2
         oldSize := newDeq.Size()
         if newDeq.AddFront(currVal) {
@@ -22,7 +22,7 @@ func TestAddFrontLL(t *testing.T) {
 
 func TestAddBackLL(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeqLL(iterations)
+        newDeq := NewDeqLL()
         currVal := iterations*2
         oldSize := newDeq.Size()
         if newDeq.AddBack(currVal) {
@@ -38,7 +38,7 @@ func TestAddBackLL(t *testing.T) {
 
 func filledDeqLL(delta int) *DeqLL {
     loops := delta+50
-    newDeq := NewDeqLL(loops)
+    newDeq := NewDeqLL()
     for loops != 0 {
         newDeq.AddBack(loops)
         loops--
@@ -84,7 +84,7 @@ func TestRemoveBackLL(t *testing.T) {
 }
 
 func TestPeekFrontLL(t *testing.T) {
-    newDeq := NewDeqLL(100)
+    newDeq := NewDeqLL()
     for iterations := 1; iterations < 100; iterations++ {
         newDeq.AddFront(iterations)
         currTop := newDeq.PeekFront()
@@ -95,7 +95,7 @@ func TestPeekFrontLL(t *testing.T) {
 }
 
 func TestPeekBackLL(t *testing.T) {
-    newDeq := NewDeqLL(100)
+    newDeq := NewDeqLL()
     for iterations := 1; iterations < 100; iterations++ {
         newDeq.AddBack(iterations)
         currTail := newDeq.PeekBack()

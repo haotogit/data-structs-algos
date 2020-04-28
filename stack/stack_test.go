@@ -5,7 +5,7 @@ import (
 )
 
 func filledStack(capacity int) *Stack {
-    newStack := NewStack(capacity)
+    newStack := NewStack()
     for capacity != 0 {
         newStack.Push(capacity)
         capacity--
@@ -16,7 +16,7 @@ func filledStack(capacity int) *Stack {
 
 func TestPush(t *testing.T) {
     for iterations := 0; iterations < 100; iterations++ {
-        newStack := NewStack((iterations+10))
+        newStack := NewStack()
         for loops := 0; loops < 10; loops++ {
             newVal := loops+iterations
             oldSize := newStack.Size()
@@ -48,7 +48,7 @@ func TestPop(t *testing.T) {
 
 func TestPeek(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newStack := NewStack(iterations)
+        newStack := NewStack()
         newStack.Push(iterations)
         peeked := newStack.Peek()
         if peeked != iterations {
