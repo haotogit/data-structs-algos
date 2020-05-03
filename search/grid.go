@@ -1,13 +1,15 @@
 package search
 
 import (
-    "fmt"
     "../util"
+    "../queue"
 )
 
 type Gridd interface {
     SetCells()
-    //BFS()
+    MineCells()
+    SetNeighbors()
+    BFS(x, y int) *queue.Queue
     //DFS()
 }
 
@@ -36,10 +38,9 @@ func (g *Grid) MineCells(nMines int) {
     }
 }
 
-func (g *Grid) GetNeighbors(x, y int) {
+func (g *Grid) SetNeighbors(x, y int) {
     currCell := g.Rows[x][y]
     neighbors := 0
-
     for xPos := x-1; xPos < g.width && xPos <= x+1; xPos++ {
         for yPos := y-1; yPos < g.height && yPos <= y+1; yPos++ {
             if ((xPos >= 0 && yPos >= 0) && (xPos != x && yPos != y) &&
@@ -49,18 +50,51 @@ func (g *Grid) GetNeighbors(x, y int) {
         }
     }
 
-    currCell.WelcomeNeighbors(neighbors)
+    currCell.SetNeighbors(neighbors)
 
     if (x == g.width-1 && y == g.height-1) {
         return
     } else if (x == g.width-1 && y < g.height-1) {
-        g.GetNeighbors(0, y+1)
+        g.SetNeighbors(0, y+1)
     } else {
-        g.GetNeighbors(x+1, y)
+        g.SetNeighbors(x+1, y)
     }
 }
 
-func BuildGrid(size int, nMines int) *Grid {
+func (g *Grid) BFS(x, y int) *queue.Queue {
+    if g.Rows[x][y].mined {
+        return nil
+    } 
+
+    resultQ := queue.NewQ(g.width*g.height)
+    searchQ := queue.NewQ(g.width*g.height)
+    currCell := g.Rows[x][y]
+    currCell.visited = true
+    searchQ.Enqueue(currCell)
+
+    for searchQ.Size() != 0 {
+        currCell = searchQ.Dequeue().(*Cell)
+        resultQ.Enqueue(currCell)
+
+        if currCell.GetNeighbors() == 0 {
+            for xPos := x-1; xPos < g.width && xPos <= x+1; xPos++ {
+                for yPos := y-1; yPos < g.height && yPos <= y+1; yPos++ {
+                    if (xPos >= 0 && yPos >= 0) && (xPos != x && yPos != y) {
+                        nextCell := g.Rows[xPos][yPos]
+                        if !nextCell.visited {
+                            nextCell.visited = true
+                            searchQ.Enqueue(nextCell)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return resultQ
+}
+
+func BuildGrid(size, nMines int) *Grid {
     newGrid := &Grid{
         size,
         size,
@@ -69,19 +103,6 @@ func BuildGrid(size int, nMines int) *Grid {
 
     newGrid.SetCells()
     newGrid.MineCells(nMines)
-    newGrid.GetNeighbors(0, 0)
+    newGrid.SetNeighbors(0, 0)
     return newGrid
-}
-
-func (g *Grid) Printer() {
-    for x := 0; x < g.width; x++ {
-        for y := 0; y < g.height; y++ {
-            msg := "Cell %+v "
-            if (y == g.height-1) {
-                msg+= "\n"
-            }
-
-            fmt.Printf(msg, g.Rows[x][y])
-        }
-    }
 }

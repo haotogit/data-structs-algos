@@ -1,20 +1,25 @@
 package search
 
 type Cell struct {
-    row int
-    col int
+    x int
+    y int
     mined bool
-    Neighbors int
+    neighbors int
+    visited bool
 }
 
 func NewCell(x int, y int) *Cell {
-    return &Cell{ x, y, false, 0 }
+    return &Cell{ x, y, false, 0, false }
 }
 
 func (c *Cell) PlantMine() {
     c.mined = true
 }
 
-func (c *Cell) WelcomeNeighbors(n int) {
-    c.Neighbors = n
+func (c *Cell) SetNeighbors(n int) {
+    c.neighbors = n
+}
+
+func (c *Cell) GetNeighbors() int {
+    return c.neighbors
 }

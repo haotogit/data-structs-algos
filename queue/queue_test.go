@@ -12,7 +12,7 @@ func TestEnqueue(t *testing.T) {
             random := util.GetRandIntn(loops*3)
             oldSize := newQ.Size()
             if newQ.Enqueue(random) {
-                lastItem := newQ.currDeq.PeekBack()
+                lastItem := newQ.items.PeekBack()
                 newSize := newQ.Size()
 
                 if oldSize == newSize || random != lastItem {
@@ -54,7 +54,7 @@ func TestPeek(t *testing.T) {
         newQ := filledQ(iterations+10)
         for loops := 0; loops < 10; loops++ {
             currFront := newQ.Peek()
-            deqFront := newQ.currDeq.PeekFront()
+            deqFront := newQ.items.PeekFront()
             
             if currFront != deqFront {
                 t.Errorf("Not peeking right expected: %+v, got: %v", deqFront, currFront)

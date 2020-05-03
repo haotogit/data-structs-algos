@@ -9,29 +9,33 @@ type MyQueue interface {
 }
 
 type Queue struct {
-    currDeq *Deq
+    items *Deq
 }
 
 func (q *Queue) Enqueue(el interface{}) bool {
-    return q.currDeq.AddBack(el)
+    return q.items.AddBack(el)
 }
 
 func (q *Queue) Dequeue() interface{} {
-    return q.currDeq.RemoveFront()
+    return q.items.RemoveFront()
 }
 
 func (q *Queue) Peek() interface{} {
-    return q.currDeq.PeekFront()
+    return q.items.PeekFront()
 }
 
 func (q *Queue) Size() int {
-    return q.currDeq.Size()
+    return q.items.Size()
 }
 
 func (q *Queue) Capacity() int {
-    return q.currDeq.Capacity()
+    return q.items.Capacity()
 }
 
+// if capacity bounded queue, and using 
+// slice as backing store, but if no capacity
+// wouldnt be bad to use DeqLL since actions
+// are only on head and tail of list
 func NewQ(capacity int) *Queue {
     return &Queue{ NewDeq(capacity) }
 }
