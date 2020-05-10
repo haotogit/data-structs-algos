@@ -4,7 +4,7 @@ type Cell struct {
     x int
     y int
     mined bool
-    neighbors int
+    minedNeighbors int
     visited bool
 }
 
@@ -17,9 +17,9 @@ func (c *Cell) PlantMine() {
 }
 
 func (c *Cell) SetNeighbors(n int) {
-    c.neighbors = n
+    c.minedNeighbors = n
 }
 
 func (c *Cell) GetNeighbors() int {
-    return c.neighbors
+    return c.minedNeighbors
 }

@@ -1,9 +1,9 @@
 package search
 
 import (
-    "fmt"
     "testing"
     "../util"
+    "../queue"
 )
 
 func makeTestGrid(size int) *Grid {
@@ -29,8 +29,8 @@ func TestGetNeighbors(t *testing.T) {
                     }
                 }
 
-                if (currCell.neighbors != neighbors) {
-                    t.Errorf("Wrong count of neighbors for cell at %d, %d, expected %d, but got %d", x, y, neighbors, currCell.neighbors)
+                if (currCell.minedNeighbors != neighbors) {
+                    t.Errorf("Wrong count of neighbors for cell at %d, %d, expected %d, but got %d", x, y, neighbors, currCell.minedNeighbors)
                 }
             }
         }
@@ -39,56 +39,83 @@ func TestGetNeighbors(t *testing.T) {
 
 // test:
 // 1. each cell is only visited only once
-// check that resultQ doesn't have dupes
-// 2. order of traversal
-// if currCell.x < lastCell.x-1 or > lastCell.x+1 ||
-// currCell.y < lastCell.y-1 or > lastCell.y+1 it is outside of current neighboring range
-// 3. test that it visits the right neighbors
-// 
+// 2. order of traversal and that it visits the right neighbors
+// traverse resultQ by getting subtree top node's unmined neighbors,
+// then each of those neighbors unmined neighbors subsequently. 
+// until descending neighbors have no unmined
 func TestBFS(t *testing.T) {
-    var currCell, papaCell *Cell
     var newGrid *Grid
-    var visited []*Cell
+    var subTree *queue.Queue
+    var visited *queue.Queue
 
-    for iterations := 1; iterations < 11; iterations++ {
-        newGrid = makeTestGrid(iterations+10)
-        visited = make([]*Cell, newGrid.height*newGrid.width)
+    for iterations := 0; iterations < 100; iterations++ {
+        var currCell, papaCell *Cell
+        newGrid = makeTestGrid(iterations+20)
+        visited = queue.NewQ(newGrid.width*newGrid.height)
         randInt := util.GetRandIntn(newGrid.width*newGrid.height)
         randX := randInt/newGrid.width
         randY := randInt%newGrid.height
         resultQ := newGrid.BFS(randX, randY)
+
         if resultQ != nil && resultQ.Size() > 1 {
-            fmt.Printf("=========resultsize %d\n", resultQ.Size())
-            i := 0
-            for ; resultQ.Size() != 0; {
+            for resultQ.Size() != 0 {
+                subTree = queue.NewQ(newGrid.height*newGrid.width)
                 if papaCell == nil {
                     papaCell = resultQ.Dequeue().(*Cell)
-                    visited[i] = papaCell
-                    i++
                 }
 
-                fmt.Printf("newPapa %+v----------------\n", papaCell)
-                currCell = resultQ.Dequeue().(*Cell)
-
-                for (currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
-                    (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y + 1) && 
-                    resultQ.Size() != 0 {
-                    visited[i] = currCell
-                    i++
-                    fmt.Printf("child %+v----------------\n", currCell)
+                checkVisited(t, papaCell, visited)
+                visited.Enqueue(papaCell)
+                if papaCell.minedNeighbors == 0 {
                     currCell = resultQ.Dequeue().(*Cell)
-                    fmt.Printf("nextchild %+v----------------\n", currCell)
+
+                    // get papaCell direct children and put them in subtree
+                    // last currCell will be first child of first node in subtree
+                    for resultQ.Size() != 0 &&
+                        ((currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
+                        (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y +1)) {
+                        subTree.Enqueue(currCell)
+                        checkVisited(t, currCell, visited)
+                        visited.Enqueue(currCell)
+                        currCell = resultQ.Dequeue().(*Cell)
+                    }
+
+                    // get children of subtree and subsequent children
+                    for resultQ.Size() != 0 && subTree.Size() != 0 {
+                        mamaCell := subTree.Dequeue().(*Cell)
+                        if mamaCell.minedNeighbors == 0 {
+                            for (currCell.x >= mamaCell.x - 1 &&
+                                currCell.x <= mamaCell.x + 1) &&
+                                (currCell.y >= mamaCell.y -1 && currCell.y <= mamaCell.y + 1) {
+                                if currCell.minedNeighbors == 0 {
+                                    subTree.Enqueue(currCell)
+                                }
+
+                                checkVisited(t, currCell, visited)
+                                visited.Enqueue(currCell)
+                                currCell = resultQ.Dequeue().(*Cell)
+
+                                // if resultQ.Size == 0 check last child
+                                // hasn't been visited
+                                if resultQ.Size() == 0 {
+                                    checkVisited(t, currCell, visited)
+                                    visited.Enqueue(currCell)
+                                    break
+                                }
+                            }
+                        }
+                    }
                 }
-
-                papaCell = currCell
-                visited[i] = currCell
-                i++
-                fmt.Printf("nextPapa %+v----------------\n", papaCell)
-
             }
-        fmt.Printf("=========visited %d\n", len(visited))
-        fmt.Printf("=========finalqqq %d\n", resultQ.Size())
-        fmt.Printf("=========i%d\n", i)
+        }
+    }
+}
+
+func checkVisited(t *testing.T, currCell *Cell, visited *queue.Queue) {
+    for visited.Size() != 0 {
+        currVisited := visited.Dequeue().(*Cell)
+        if currCell == currVisited {
+            t.Errorf("Node already visited %+v", currCell)
         }
     }
 }
