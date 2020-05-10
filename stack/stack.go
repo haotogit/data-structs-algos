@@ -13,23 +13,23 @@ type MyStack interface {
 }
 
 type Stack struct {
-    currStack *queue.DeqLL
+    items *queue.DeqLL
 }
 
 func (s *Stack) Push(el interface{}) bool {
-    return s.currStack.AddFront(el)
+    return s.items.AddFront(el)
 }
 
 func (s *Stack) Pop() interface{} {
-    return s.currStack.RemoveFront()
+    return s.items.RemoveFront()
 }
 
 func (s *Stack) Peek() interface{} {
-    return s.currStack.PeekFront()
+    return s.items.PeekFront()
 }
 
 func (s *Stack) Size() int {
-    return s.currStack.Size()
+    return s.items.Size()
 }
 
 func NewStack() *Stack {

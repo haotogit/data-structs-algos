@@ -10,7 +10,8 @@ type Gridd interface {
     MineCells()
     SetNeighbors()
     BFS(x, y int) *queue.Queue
-    //DFS()
+    DFS(x, y int) *queue.Queue
+    OuttaRange(x, y int) bool
 }
 
 type Grid struct {
@@ -43,7 +44,7 @@ func (g *Grid) SetNeighbors(x, y int) {
     neighbors := 0
     for xPos := x-1; xPos < g.width && xPos <= x+1; xPos++ {
         for yPos := y-1; yPos < g.height && yPos <= y+1; yPos++ {
-            if ((xPos >= 0 && yPos >= 0) && (xPos != x && yPos != y) &&
+            if (xPos > 0 && yPos > 0) && ((xPos != x || yPos != y) &&
                 g.Rows[xPos][yPos].mined) {
                 neighbors++
             }
@@ -61,8 +62,13 @@ func (g *Grid) SetNeighbors(x, y int) {
     }
 }
 
+func (g *Grid) OuttaRange(x, y int) bool {
+    return (x < 0 || x > g.width-1) ||
+        (y < 0 || y > g.height-1)
+}
+
 func (g *Grid) BFS(x, y int) *queue.Queue {
-    if g.Rows[x][y].mined {
+    if g.OuttaRange(x, y) || g.Rows[x][y].mined {
         return nil
     } 
 
@@ -77,14 +83,43 @@ func (g *Grid) BFS(x, y int) *queue.Queue {
         resultQ.Enqueue(currCell)
 
         if currCell.GetNeighbors() == 0 {
-            for xPos := x-1; xPos < g.width && xPos <= x+1; xPos++ {
-                for yPos := y-1; yPos < g.height && yPos <= y+1; yPos++ {
-                    if (xPos >= 0 && yPos >= 0) && (xPos != x && yPos != y) {
+            for xPos := currCell.x-1; xPos < g.width && xPos <= currCell.x+1; xPos++ {
+                for yPos := currCell.y-1; yPos < g.height && yPos <= currCell.y+1; yPos++ {
+                    if (xPos > 0 && yPos > 0) && (xPos != currCell.x || yPos != currCell.y) {
                         nextCell := g.Rows[xPos][yPos]
                         if !nextCell.visited {
                             nextCell.visited = true
                             searchQ.Enqueue(nextCell)
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    return resultQ
+}
+
+func (g *Grid) DFS(x, y int, resultQ *queue.Queue) *queue.Queue {
+    if g.OuttaRange(x, y) || g.Rows[x][y].mined {
+        return nil
+    }
+
+    currCell := g.Rows[x][y]
+    if resultQ == nil {
+        resultQ = queue.NewQ(g.width*g.height)
+        currCell.visited = true
+    }
+
+    resultQ.Enqueue(currCell)
+    if currCell.GetNeighbors() == 0 {
+        for xPos := x-1; xPos < g.width && xPos <= x+1; xPos++ {
+            for yPos := y-1; yPos < g.height && yPos <= y+1; yPos++ {
+                if (xPos >= 0 && yPos >= 0) && (xPos != x && yPos != y) {
+                    nextCell := g.Rows[xPos][yPos]
+                    if !nextCell.visited {
+                        nextCell.visited = true
+                        g.DFS(xPos, yPos, resultQ)
                     }
                 }
             }
