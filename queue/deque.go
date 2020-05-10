@@ -39,18 +39,16 @@ func (d *Deq) AddFront(el interface{}) bool {
     if d.currSize == d.capacity {
         // +1 for if cap == 0
         d.capacity = (d.capacity+1)*2
-    }
-    
-    if d.currSize == 0 {
-        d.list[0] = newNode(el)
-    } else {
-        newList := make([]*Node, d.capacity)
-        newList[0] = newNode(el)
-        copy(newList[1:], d.list)
-        d.list = newList
+        d.list = make([]*Node, 0, d.capacity)
     }
     
     d.currSize++
+    d.list = d.list[:d.currSize]
+    if d.currSize != 0 {
+        copy(d.list[1:], d.list)
+    }
+
+    d.list[0] = newNode(el)
     return true 
 }
 
@@ -61,13 +59,12 @@ func (d *Deq) AddBack(el interface{}) bool {
 
     if d.currSize == d.capacity {
         d.capacity = (d.capacity+1)*2
-        newList := make([]*Node, d.capacity)
-        copy(newList, d.list)
-        d.list = newList
+        d.list = make([]*Node, 0, d.capacity)
     }
     
-    d.list[d.currSize] = newNode(el)
     d.currSize++
+    d.list = d.list[:d.currSize]
+    d.list[d.currSize-1] = newNode(el)
     return true 
 }
 
@@ -77,7 +74,10 @@ func (d *Deq) RemoveFront() interface{} {
     }
 
     toRemove := d.list[0]
-    d.list = d.list[1:]
+    // to append or to copy ?
+    //d.list = append(d.list[1:], nil)
+    copy(d.list[:], d.list[1:])
+    d.list[d.currSize-1] = nil
     d.currSize--
     return toRemove.Data
 }
@@ -102,7 +102,7 @@ func (d *Deq) PeekFront() interface{} {
 }
 
 func (d *Deq) PeekBack() interface{} {
-    if d.currSize == 0 {
+    if d.currSize == 0 || d.list[d.currSize-1] == nil {
         return nil
     }
 

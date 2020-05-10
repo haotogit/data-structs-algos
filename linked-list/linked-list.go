@@ -1,7 +1,6 @@
 package linkedList
 
 import (
-    "fmt"
     "../util"
 )
 
@@ -142,8 +141,8 @@ func (l *LinkedList) Remove(i int) interface{} {
         return nil
     }
 
-    prev := l.GetNth(i-1)
-    next := l.GetNth(i+1)
+    prev := currNode.prev
+    next := currNode.next
 
     if prev != nil {
         prev.next = next
@@ -177,19 +176,6 @@ func (l *LinkedList) FillList(size int) {
         l.Add(util.GetRandIntn(1000)+15)
         withSize--
     }
-}
-
-func (l *LinkedList) PrintList() {
-    target := l.Head;
-    fmt.Printf("head==== %p %+v\n", target, target)
-    target = target.next
-    for target != nil {
-        fmt.Printf("==== %p %+v\n", target, target)
-        target = target.next
-    }
-    fmt.Printf("tail==== %p %+v\n", l.Tail, l.Tail)
-    //fmt.Printf("==== %p %+v\n", target, target)
-    fmt.Println("======================== -- =============================")
 }
 
 func NewLinkedList() *LinkedList {

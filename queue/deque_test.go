@@ -6,15 +6,18 @@ import (
 
 func TestAddFront(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeq(iterations)
-        currVal := iterations*2
-        oldSize := newDeq.Size()
-        if newDeq.AddFront(currVal) {
-            curr := newDeq.PeekFront()
-            newSize := newDeq.Size()
-            
-            if curr != currVal {
-               t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d", currVal, curr, oldSize, newSize)
+        newDeq := NewDeq(iterations+10)
+        for x := 0; x < 10; x++ {
+            oldSize := newDeq.Size()
+            currVal := iterations*x
+            if newDeq.AddFront(currVal) {
+                curr := newDeq.RemoveFront()
+                newSize := newDeq.Size()
+                next := newDeq.RemoveFront()
+
+                if curr != currVal || oldSize == newSize+1 || curr == next {
+                   t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d curr %+v next %+v", currVal, curr, oldSize, newSize+1, curr, next)
+                }
             }
         }
     }
@@ -22,15 +25,17 @@ func TestAddFront(t *testing.T) {
 
 func TestAddBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
-        newDeq := NewDeq(iterations)
-        currVal := iterations*2
-        oldSize := newDeq.Size()
-        if newDeq.AddBack(currVal) {
-            curr := newDeq.PeekBack()
-            newSize := newDeq.Size()
-            
-            if curr != currVal {
-               t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d", currVal, curr, oldSize, newSize)
+        newDeq := NewDeq(iterations+10)
+        for x := 0; x < 10; x ++ {
+            currVal := iterations*x
+            oldSize := newDeq.Size()
+            if newDeq.AddBack(currVal) {
+                curr := newDeq.PeekBack()
+                newSize := newDeq.Size()
+
+                if curr != currVal {
+                   t.Errorf("Expected %v, but got %v, or incorrect size old %d, new %d", currVal, curr, oldSize, newSize)
+                }
             }
         }
     }
@@ -72,14 +77,12 @@ func TestRemoveFront(t *testing.T) {
             newVal := newDeq.PeekFront()
             newSize := newDeq.Size()
 
-            if removed != oldTop || newSize == oldSize {
+            if removed != nil && removed != oldTop || newSize == oldSize {
                 t.Errorf("Did not remove %v oldTop%p %+v, currFront %p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
             }
         }
     }
 }
-
-
 
 func TestRemoveBack(t *testing.T) {
     for iterations := 1; iterations < 100; iterations++ {
@@ -91,7 +94,7 @@ func TestRemoveBack(t *testing.T) {
             newVal := newDeq.PeekBack()
             newSize := newDeq.Size()
 
-            if removed != oldTop || oldTop == newVal {
+            if removed != nil && removed != oldTop || oldTop == newVal {
                 t.Errorf("Did not remove %v oldTop%p %+v, newVal%p %+v or incorrect size old %d, new %d", removed, oldTop, oldTop, newVal, newVal, oldSize, newSize)
             }
         }
@@ -116,6 +119,25 @@ func TestPeekBack(t *testing.T) {
         currTail := newDeq.PeekBack()
         if currTail !=  iterations {
             t.Errorf("Expected %+v, but got %v", iterations, currTail)
+        }
+    }
+}
+
+func TestAddRemove(t *testing.T) {
+    for iterations := 1; iterations < 100; iterations++ {
+        newDeq := filledDeq(iterations)
+        oldSize := newDeq.Size()
+        for w := 0; w < oldSize; w++ {
+            oldCap := newDeq.Capacity()
+            curr := newDeq.RemoveFront()
+            newSize := newDeq.Size()
+            if oldSize == newSize || oldCap != newDeq.Capacity() {
+                t.Errorf("Wrong size after remove expected %d got %d or cap expected %d got %d", oldSize, newSize, oldCap, newDeq.Capacity())
+            }
+
+            if newDeq.AddBack(curr) && oldSize != newDeq.Size() || oldCap != newDeq.Capacity() {
+                t.Errorf("Wrong size after readd expected %d got %d or cap expected %d got %d", oldSize, newDeq.Size(), oldCap, newDeq.Capacity())
+            }
         }
     }
 }

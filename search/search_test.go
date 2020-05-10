@@ -46,26 +46,23 @@ func TestGetNeighbors(t *testing.T) {
 func TestBFS(t *testing.T) {
     var newGrid *Grid
     var subTree *queue.Queue
-    var visited *queue.Queue
 
-    for iterations := 0; iterations < 100; iterations++ {
+    for iterations := 0; iterations < 10; iterations++ {
         var currCell, papaCell *Cell
         newGrid = makeTestGrid(iterations+20)
-        visited = queue.NewQ(newGrid.width*newGrid.height)
         randInt := util.GetRandIntn(newGrid.width*newGrid.height)
         randX := randInt/newGrid.width
         randY := randInt%newGrid.height
         resultQ := newGrid.BFS(randX, randY)
 
         if resultQ != nil && resultQ.Size() > 1 {
+            checkVisited(t, resultQ)
             for resultQ.Size() != 0 {
                 subTree = queue.NewQ(newGrid.height*newGrid.width)
                 if papaCell == nil {
                     papaCell = resultQ.Dequeue().(*Cell)
                 }
 
-                checkVisited(t, papaCell, visited)
-                visited.Enqueue(papaCell)
                 if papaCell.minedNeighbors == 0 {
                     currCell = resultQ.Dequeue().(*Cell)
 
@@ -75,8 +72,6 @@ func TestBFS(t *testing.T) {
                         ((currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
                         (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y +1)) {
                         subTree.Enqueue(currCell)
-                        checkVisited(t, currCell, visited)
-                        visited.Enqueue(currCell)
                         currCell = resultQ.Dequeue().(*Cell)
                     }
 
@@ -91,15 +86,11 @@ func TestBFS(t *testing.T) {
                                     subTree.Enqueue(currCell)
                                 }
 
-                                checkVisited(t, currCell, visited)
-                                visited.Enqueue(currCell)
                                 currCell = resultQ.Dequeue().(*Cell)
 
                                 // if resultQ.Size == 0 check last child
                                 // hasn't been visited
                                 if resultQ.Size() == 0 {
-                                    checkVisited(t, currCell, visited)
-                                    visited.Enqueue(currCell)
                                     break
                                 }
                             }
@@ -111,20 +102,25 @@ func TestBFS(t *testing.T) {
     }
 }
 
-func checkVisited(t *testing.T, currCell *Cell, visited *queue.Queue) {
-    for visited.Size() != 0 {
-        currVisited := visited.Dequeue().(*Cell)
-        if currCell == currVisited {
-            t.Errorf("Node already visited %+v", currCell)
+func checkVisited(t *testing.T, resultQ *queue.Queue) {
+    resultSize := resultQ.Size()
+    visited := make([]*Cell, 0, resultSize)
+    for x := 0; x < resultSize; x++ {
+        currCell := resultQ.Dequeue().(*Cell)
+        for i := 0; i < len(visited); i++ {
+            if currCell == visited[i] {
+                t.Errorf("Visited incorrectly, found dupe")
+            }
         }
+        visited = visited[:x+1]
+        visited[x] = currCell
+        resultQ.Enqueue(currCell)
     }
 }
 
 // to test:
 // 1. each cell only visited once
 // 2. order of traversal
-// if currCell.x < lastCell.x -1 or > lastCell.x ||
-// currCell.y < lastCell
 //func TestDFS(t *testing.T) {
 //    var lastCell *Cell
 //    var newGrid *Grid
