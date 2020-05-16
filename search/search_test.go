@@ -47,7 +47,7 @@ func TestBFS(t *testing.T) {
     var newGrid *Grid
     var subTree *queue.Queue
 
-    for iterations := 0; iterations < 10; iterations++ {
+    for iterations := 0; iterations < 100; iterations++ {
         var currCell, papaCell *Cell
         newGrid = makeTestGrid(iterations+20)
         randInt := util.GetRandIntn(newGrid.width*newGrid.height)
@@ -56,47 +56,38 @@ func TestBFS(t *testing.T) {
         resultQ := newGrid.BFS(randX, randY)
 
         if resultQ != nil && resultQ.Size() > 1 {
+            resultSize := resultQ.Size()
             checkVisited(t, resultQ)
-            for resultQ.Size() != 0 {
-                subTree = queue.NewQ(newGrid.height*newGrid.width)
+            subTree = queue.NewQ(newGrid.height*newGrid.width)
+            count := 0
+            subTree.Enqueue(resultQ.Dequeue().(*Cell))
+            for resultQ.Size() != 0 && subTree.Size() != 0 {
                 if papaCell == nil {
-                    papaCell = resultQ.Dequeue().(*Cell)
+                    papaCell = subTree.Dequeue().(*Cell)
+                    count++
+                } else {
+                    papaCell = currCell
                 }
 
-                if papaCell.minedNeighbors == 0 {
-                    currCell = resultQ.Dequeue().(*Cell)
-
-                    // get papaCell direct children and put them in subtree
-                    // last currCell will be first child of first node in subtree
-                    for resultQ.Size() != 0 &&
-                        ((currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
-                        (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y +1)) {
+                currCell = resultQ.Dequeue().(*Cell)
+                count++
+                for ((currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
+                    (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y +1)) {
+                    if currCell.minedNeighbors == 0 {
                         subTree.Enqueue(currCell)
-                        currCell = resultQ.Dequeue().(*Cell)
                     }
 
-                    // get children of subtree and subsequent children
-                    for resultQ.Size() != 0 && subTree.Size() != 0 {
-                        mamaCell := subTree.Dequeue().(*Cell)
-                        if mamaCell.minedNeighbors == 0 {
-                            for (currCell.x >= mamaCell.x - 1 &&
-                                currCell.x <= mamaCell.x + 1) &&
-                                (currCell.y >= mamaCell.y -1 && currCell.y <= mamaCell.y + 1) {
-                                if currCell.minedNeighbors == 0 {
-                                    subTree.Enqueue(currCell)
-                                }
-
-                                currCell = resultQ.Dequeue().(*Cell)
-
-                                // if resultQ.Size == 0 check last child
-                                // hasn't been visited
-                                if resultQ.Size() == 0 {
-                                    break
-                                }
-                            }
-                        }
+                    if resultQ.Size() == 0 {
+                        break
+                    } else {
+                        currCell = resultQ.Dequeue().(*Cell)
+                        count++
                     }
                 }
+            }
+
+            if resultSize != count || resultQ.Size() != 0 {
+                t.Errorf("Traversed incorrect number of nodes resultSize %d, but got %d, and should be 0 %d", resultSize, count, resultQ.Size())
             }
         }
     }
@@ -112,6 +103,7 @@ func checkVisited(t *testing.T, resultQ *queue.Queue) {
                 t.Errorf("Visited incorrectly, found dupe")
             }
         }
+
         visited = visited[:x+1]
         visited[x] = currCell
         resultQ.Enqueue(currCell)
@@ -122,36 +114,5 @@ func checkVisited(t *testing.T, resultQ *queue.Queue) {
 // 1. each cell only visited once
 // 2. order of traversal
 //func TestDFS(t *testing.T) {
-//    var lastCell *Cell
-//    var newGrid *Grid
-//    var visited []*Cell
-//    newGrid = makeTestGrid(10)
-//    visited = make([]*Cell, newGrid.width*newGrid.height)
-//    randInt := util.GetRandIntn(newGrid.width*newGrid.height)
-//    randX := randInt/newGrid.width
-//    randY := randInt%newGrid.height
-//
-//    resultQ := newGrid.DFS(randX, randY, nil)
-//
-//    if resultQ != nil {
-//        for i := 0; resultQ.Size() != 0; i++ {
-//            currCell := resultQ.Dequeue().(*Cell)
-//            if i == 0 {
-//                if currCell != newGrid.Rows[randX][randY] {
-//                    t.Errorf("Incorrect order of traversal on initial node, should be %+v but got %+v", newGrid.Rows[randX][randY], currCell)
-//                }
-//            } else {
-//                if (currCell.x < newGrid.width-1 || currCell.x > lastCell.x+1) ||
-//                    (currCell.y < lastCell.y-1 || currCell.y > lastCell.x+1) {
-//                        t.Errorf("Incorrect order of traversal, curr node at %+v is not direct descendant of %+v", currCell, lastCell)
-//                } else {
-//                    for k := 0; k < len(visited); k++ {
-//                        if visited[k] == currCell {
-//                            t.Errorf("Node already visited at position %d, %+v", k, currCell)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 //}
