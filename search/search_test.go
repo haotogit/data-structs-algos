@@ -45,8 +45,6 @@ func TestGetNeighbors(t *testing.T) {
 // until descending neighbors have no unmined
 func TestBFS(t *testing.T) {
     var newGrid *Grid
-    var subTree *queue.Queue
-
     for iterations := 0; iterations < 100; iterations++ {
         var currCell, papaCell *Cell
         newGrid = makeTestGrid(iterations+20)
@@ -58,12 +56,10 @@ func TestBFS(t *testing.T) {
         if resultQ != nil && resultQ.Size() > 1 {
             resultSize := resultQ.Size()
             checkVisited(t, resultQ)
-            subTree = queue.NewQ(newGrid.height*newGrid.width)
             count := 0
-            subTree.Enqueue(resultQ.Dequeue().(*Cell))
-            for resultQ.Size() != 0 && subTree.Size() != 0 {
+            for resultQ.Size() != 0 {
                 if papaCell == nil {
-                    papaCell = subTree.Dequeue().(*Cell)
+                    papaCell = resultQ.Dequeue().(*Cell)
                     count++
                 } else {
                     papaCell = currCell
@@ -73,10 +69,6 @@ func TestBFS(t *testing.T) {
                 count++
                 for ((currCell.x >= papaCell.x - 1 && currCell.x <= papaCell.x + 1) &&
                     (currCell.y >= papaCell.y - 1 && currCell.y <= papaCell.y +1)) {
-                    if currCell.minedNeighbors == 0 {
-                        subTree.Enqueue(currCell)
-                    }
-
                     if resultQ.Size() == 0 {
                         break
                     } else {
@@ -114,5 +106,26 @@ func checkVisited(t *testing.T, resultQ *queue.Queue) {
 // 1. each cell only visited once
 // 2. order of traversal
 //func TestDFS(t *testing.T) {
-
+//    var newGrid *Grid
+//    for iterations := 0; iterations < 10; iterations++ {
+//        //var currCell, papaCell *Cell
+//        var papaCell, currCell *Cell
+//        newGrid = makeTestGrid(iterations+20)
+//        randInt := util.GetRandIntn(newGrid.width*newGrid.height)
+//        randX := randInt/newGrid.width
+//        randY := randInt%newGrid.height
+//        resultQ := newGrid.DFS(randX, randY, nil)
+//        
+//        if resultQ != nil && resultQ.Size() > 1 {
+//            for resultQ.Size() != 0 {
+//                papaCell = resultQ.Dequeue().(*Cell)
+//                currCell = resultQ.Dequeue().(*Cell)
+//
+//                if (papaCell.x-1 != currCell.x || papaCell.x+1 != currCell.x) &&
+//                    (papaCell.y-1 != currCell.y || papaCell.y+1 != currCell.y) {
+//                    t.Errorf("fuckedup papa %+v curr %+v\n", papaCell, currCell)
+//                }
+//            }
+//        }
+//    }
 //}

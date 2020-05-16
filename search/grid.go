@@ -81,7 +81,7 @@ func (g *Grid) BFS(x, y int) *queue.Queue {
     for searchQ.Size() != 0 {
         currCell = searchQ.Dequeue().(*Cell)
         resultQ.Enqueue(currCell)
-        if currCell.minedNeighbors == 0 {
+        if currCell.GetNeighbors() == 0 {
             for xPos := currCell.x-1; xPos < g.width && xPos <= currCell.x+1; xPos++ {
                 for yPos := currCell.y-1; yPos < g.height && yPos <= currCell.y+1; yPos++ {
                     if (xPos > 0 && yPos > 0) && (xPos != currCell.x || yPos != currCell.y) {
