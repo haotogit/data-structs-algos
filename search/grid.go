@@ -128,7 +128,7 @@ func (g *Grid) DFS(x, y int, resultQ *queue.Queue) *queue.Queue {
     return resultQ
 }
 
-func BuildGrid(size, nMines int) *Grid {
+func NewGrid(size, nMines int) *Grid {
     newGrid := &Grid{
         size,
         size,

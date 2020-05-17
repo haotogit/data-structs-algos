@@ -8,10 +8,6 @@ type Cell struct {
     visited bool
 }
 
-func NewCell(x int, y int) *Cell {
-    return &Cell{ x, y, false, 0, false }
-}
-
 func (c *Cell) PlantMine() {
     c.mined = true
 }
@@ -23,3 +19,8 @@ func (c *Cell) SetNeighbors(n int) {
 func (c *Cell) GetNeighbors() int {
     return c.minedNeighbors
 }
+
+func NewCell(x int, y int) *Cell {
+    return &Cell{ x, y, false, 0, false }
+}
+

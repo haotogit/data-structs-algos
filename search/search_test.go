@@ -9,7 +9,7 @@ import (
 func makeTestGrid(size int) *Grid {
     randSize := util.GetRandIntn(size)+20
     randNmines := randSize
-    return BuildGrid(randSize, randNmines)
+    return NewGrid(randSize, randNmines)
 }
 
 func TestGetNeighbors(t *testing.T) {

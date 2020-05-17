@@ -4,17 +4,16 @@ import (
     "strings"
 )
 
-type Bubbler struct{
-}
-
-func BubbleMaker() *Bubbler {
-    return &Bubbler{}
+type Bubbler struct {
+    sortMethod string
+    sortBy string
+    sortDesc bool
 }
 
 func (b *Bubbler) SortIt(list []string) {
-    for x := 0; x < len(list) - 1; x++ {
+    for x := 1; x < len(list) - 1; x++ {
         swapped := false
-        for y := 1; y < (len(list) - x); y++ {
+        for y := len(list) - 1; y >= x; y-- {
             tmp := list[y-1]
             if strings.Compare(tmp, list[y]) == 1 {
                 list[y-1] = list[y] 
@@ -26,5 +25,11 @@ func (b *Bubbler) SortIt(list []string) {
         if !swapped {
             break
         }
+    }
+}
+
+func NewBubbler(sortMethod, sortBy string, sortDesc bool) *BaseSorter {
+    return &BaseSorter{ 
+        &Bubbler{sortMethod, sortBy, sortDesc},
     }
 }
