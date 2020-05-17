@@ -4,14 +4,21 @@ import (
     "strings"
 )
 
-func Bubbler(list []string) {
+type Bubbler struct{
+}
+
+func BubbleMaker() *Bubbler {
+    return &Bubbler{}
+}
+
+func (b *Bubbler) SortIt(list []string) {
     for x := 0; x < len(list) - 1; x++ {
         swapped := false
-        for y := 0; y < len(list) - x - 1; y++ {
-            tmp := list[y]
-            if strings.Compare(tmp, list[y+1]) == 1 {
-                list[y] = list[y+1] 
-                list[y+1] = tmp
+        for y := 1; y < (len(list) - x); y++ {
+            tmp := list[y-1]
+            if strings.Compare(tmp, list[y]) == 1 {
+                list[y-1] = list[y] 
+                list[y] = tmp
                 swapped = true
             }
         }
