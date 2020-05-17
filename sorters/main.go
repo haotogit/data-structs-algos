@@ -23,6 +23,8 @@ func SortererCriador(sortAlg int, sortBy string, sortDesc bool) *BaseSorter {
         return NewBubbler(AlgMap[sortAlg], sortBy, sortDesc)
     } else if sortAlg == 1 {
         return NewInsertioner(AlgMap[sortAlg], sortBy, sortDesc)
+    } else if sortAlg == 2 {
+        return NewSelectioner(AlgMap[sortAlg], sortBy, sortDesc)
     }
 
     return  nil

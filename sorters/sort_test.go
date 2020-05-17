@@ -76,11 +76,11 @@ func TestSort(t *testing.T) {
 }
 
 func init() {
-    flag.StringVar(&docFlag, "document", document, "Document to sort")
+    flag.StringVar(&docFlag, "doc", document, "Document to sort")
     flag.StringVar(&sortByFlag, "sortBy", sortBy, "Sort by criteria")
     flag.IntVar(&startQtyFlag, "startQty", startQty, "Starting quantity to sort")
     flag.IntVar(&incByFlag, "incBy", incBy, "Increase each iteration by")
-    flag.IntVar(&iterationsFlag, "iterations", iterations, "Number of iterations")
+    flag.IntVar(&iterationsFlag, "iter", iterations, "Number of iterations")
     flag.IntVar(&sortAlgFlag, "sortAlg", sortAlg, "Which sort, 0=bubblesort, 1=insertion, 2=selection, 3=merge, 4=quick, 5=heap")
     flag.BoolVar(&sortDescFlag, "sortDesc", sortDesc, "Sort desc|asc")
 }
