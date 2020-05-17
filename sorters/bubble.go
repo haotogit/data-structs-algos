@@ -4,13 +4,12 @@ import (
     "strings"
 )
 
-type Bubbler struct {
-    sortMethod string
+type bubbler struct {
     sortBy string
     sortDesc bool
 }
 
-func (b *Bubbler) SortIt(list []string) {
+func (b *bubbler) SortIt(list []string) {
     for x := 1; x < len(list) - 1; x++ {
         swapped := false
         for y := len(list) - 1; y >= x; y-- {
@@ -30,6 +29,9 @@ func (b *Bubbler) SortIt(list []string) {
 
 func NewBubbler(sortMethod, sortBy string, sortDesc bool) *BaseSorter {
     return &BaseSorter{ 
-        &Bubbler{sortMethod, sortBy, sortDesc},
+        &bubbler{
+            sortBy,
+            sortDesc,
+        },
     }
 }

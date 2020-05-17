@@ -1,13 +1,12 @@
 package sorters
 
-type BaseSortererr interface {
+type SortMaquina interface {
     // TODO need to take in list of interface{}
     SortIt(list []string)
 }
 
 type BaseSorter struct {
-    // TODO how exactly is this working?
-    BaseSortererr
+    SortMaquina
 }
 
 var AlgMap = map[int]string{
@@ -23,7 +22,7 @@ func SortererCriador(sortAlg int, sortBy string, sortDesc bool) *BaseSorter {
     if sortAlg == 0 {
         return NewBubbler(AlgMap[sortAlg], sortBy, sortDesc)
     } else if sortAlg == 1 {
-        //return &BaseSorter{ NewInserter(AlgMap[sortAlg], sortBy, sortDesc) }
+        return NewInsertioner(AlgMap[sortAlg], sortBy, sortDesc)
     }
 
     return  nil
