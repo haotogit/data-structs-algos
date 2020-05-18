@@ -5,10 +5,6 @@ type SortMaquina interface {
     SortIt(list []string)
 }
 
-type BaseSorter struct {
-    SortMaquina
-}
-
 var AlgMap = map[int]string{
     0: "Bubble",
     1: "Insertion",
@@ -18,13 +14,14 @@ var AlgMap = map[int]string{
     5: "Heap",
 }
 
-func SortererCriador(sortAlg int, sortBy string, sortDesc bool) *BaseSorter {
-    if sortAlg == 0 {
-        return NewBubbler(AlgMap[sortAlg], sortBy, sortDesc)
-    } else if sortAlg == 1 {
-        return NewInsertioner(AlgMap[sortAlg], sortBy, sortDesc)
-    } else if sortAlg == 2 {
-        return NewSelectioner(AlgMap[sortAlg], sortBy, sortDesc)
+func SortererCriador(sortAlg int) SortMaquina {
+    switch sortAlg {
+        case 0:
+            return NewBubbler()
+        case 1:
+            return NewInsertioner()
+        case 2:
+            return NewSelectioner()
     }
 
     return  nil

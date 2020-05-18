@@ -4,12 +4,12 @@ import (
     "strings"
 )
 
-type insertioner struct {
-    sortBy string
-    sortDesc bool
-}
+type Insertioner struct {}
+    // TODO
+    //sortBy string
+    //sortDesc bool
 
-func (in *insertioner) SortIt(list []string) {
+func (in *Insertioner) SortIt(list []string) {
     for x := 1; x < len(list); x++ {
         y := x
         tmp := list[y]
@@ -25,11 +25,6 @@ func (in *insertioner) SortIt(list []string) {
     }
 }
 
-func NewInsertioner(sortMethod, sortBy string, sortDesc bool) *BaseSorter {
-    return &BaseSorter{
-        &insertioner {
-            sortBy,
-            sortDesc,
-        },
-    }
+func NewInsertioner() *Insertioner {
+    return &Insertioner {}
 }

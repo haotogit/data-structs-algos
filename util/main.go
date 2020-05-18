@@ -3,6 +3,7 @@ package util
 import (
     "math/rand"
     "time"
+    //"strconv"
 )
 
 func GetRandIntn(max int) int {
@@ -27,3 +28,17 @@ func IsNil(el interface{}) bool {
 
     return nilVal == el
 }
+
+func GetUnderType(el interface{}) interface{} {
+    switch el.(type) {
+        case string:
+            return el.(string)
+        case int:
+            return el.(int)
+        default:
+            return el.(string)
+    }
+
+    return el.(string)
+}
+

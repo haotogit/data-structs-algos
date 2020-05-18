@@ -32,11 +32,15 @@ func checkErr(e error) {
     }
 }
 
+// TODO return interface{} instead so can sort on
+// any but was having problems with type assertion
+// for comparisons
 func obterItens(path string, qty int) ([]string, []string) {
     var list, proofList []string
     arquivo, err := os.Open(path)
     checkErr(err)
     defer arquivo.Close()
+    // TODO refactor this to read without bufio
     escaneadora := bufio.NewScanner(arquivo)
 
     for i := 0; i < qty && escaneadora.Scan(); i++ {
@@ -57,7 +61,7 @@ func obterItens(path string, qty int) ([]string, []string) {
 func TestSort(t *testing.T) {
     fmt.Printf("Sorting %s with sortAlg: %s\n", docFlag, AlgMap[sortAlgFlag])
     for i := 0; i < iterationsFlag; i++ {
-        currSort := SortererCriador(sortAlgFlag, sortByFlag, sortDescFlag)
+        currSort := SortererCriador(sortAlgFlag)
         toSort, proof := obterItens(docFlag, startQty+(incByFlag*i))
         sort.Strings(proof)
         startTime := time.Now()

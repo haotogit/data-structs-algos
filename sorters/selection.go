@@ -4,12 +4,9 @@ import (
     "strings"
 )
 
-type selectioner struct {
-    sortBy string
-    sortDesc bool
-}
+type Selectioner struct {}
 
-func (s *selectioner) SortIt(list []string) {
+func (s *Selectioner) SortIt(list []string) {
     for cursor := 0; cursor < len(list); cursor++ {
         low := list[cursor]
         prevIdx := cursor
@@ -26,11 +23,6 @@ func (s *selectioner) SortIt(list []string) {
     }
 }
 
-func NewSelectioner(sortMethod, sortBy string, sortDesc bool) *BaseSorter {
-    return &BaseSorter{ 
-        &selectioner{
-            sortBy,
-            sortDesc,
-        },
-    }
+func NewSelectioner() *Selectioner {
+    return &Selectioner{}
 }
