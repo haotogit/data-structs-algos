@@ -7,13 +7,13 @@ import (
     "testing"
     "flag"
     "sort"
-    "strings"
+    "reflect"
     "time"
 )
 
 const (
     document = "small-wordlist.txt"
-    startQty = 5000
+    startQty = 10000
     incBy = 10000
     iterations = 5
     sortAlg = 0
@@ -69,12 +69,9 @@ func TestSort(t *testing.T) {
         endTime := time.Now()
         elapsed := endTime.Sub(startTime)
         fmt.Printf("%d: Sorted %d items in %d ms\n", i+1, len(toSort), elapsed.Milliseconds())
-        for x := 0; x < len(toSort); x++ {
-            if strings.Compare(toSort[x], proof[x]) != 0 {
-                t.Errorf("Failed %s sort at %d, expected %+v, but got %+v", AlgMap[sortAlgFlag], x, proof[x], toSort[x])
-            }
+        if !reflect.DeepEqual(toSort, proof) {
+            t.Errorf("Did not sort correctly")
         }
-
         fmt.Println("<<<<<<<<<<<<<<<<<<<<< ================== >>>>>>>>>>>>>>>>>>>>>")
     }
 }
