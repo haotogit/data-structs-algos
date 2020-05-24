@@ -13,9 +13,9 @@ import (
 
 const (
     document = "random-strings.txt"
-    startQty = 5000
+    startQty = 10000
     incBy = 10000
-    iterations = 5 
+    iterations = 5
     sortAlg = 4
     sortBy = ""
     sortDesc = true

@@ -25,7 +25,7 @@ func SortererCriador(sortAlg int) SortMaquina {
         case 3:
             return NewMerger()
         case 4:
-            return NewQuick()
+            return NewQuicker()
     }
 
     return  nil

@@ -1,22 +1,13 @@
 package sorters
 
-import "../util"
+type Quicker struct {}
 
-type Quick struct {}
-
-func (q *Quick) randPivotPart(list []string, first, last int) int {
-    randn := util.GetRandIntn(first, last)
-    tmp := list[randn]
-    list[randn] = list[first]
-    list[first] = tmp
-
-    return q.partition(list, first, last)
-}
-
-func (q *Quick) partition(list []string, first, last int) int {
-    pivItem := list[first]
-    left := first
-    right := last+1
+func (q *Quicker) partition(list []string, first, last int) int {
+    pivIdx := last
+    pivItem := list[pivIdx]
+    // last as pivot first-1, first as pivot last+1
+    left := first-1
+    right := last
 
     for {
         // find leftItem > pivItem
@@ -27,7 +18,7 @@ func (q *Quick) partition(list []string, first, last int) int {
 
         // find rightItem < pivItem
         right--
-        for right >= left && list[right] > pivItem {
+        for right > left && list[right] > pivItem {
             right--
         }
 
@@ -40,12 +31,14 @@ func (q *Quick) partition(list []string, first, last int) int {
         list[right] = tmp
     }
 
-    list[first] = list[right]
-    list[right] = pivItem
-    return right
+    // last as pivot swap for lesser item now at left
+    // first as pivot swap for greater item now at right
+    list[pivIdx] = list[left]
+    list[left] = pivItem
+    return left
 }
 
-func (q *Quick) quickSort(list []string, first, last int) {
+func (q *Quicker) quickSort(list []string, first, last int) {
     if first < last {
         piv := q.partition(list, first, last)
         q.quickSort(list, first, piv-1)
@@ -53,10 +46,10 @@ func (q *Quick) quickSort(list []string, first, last int) {
     }
 }
 
-func (q *Quick) SortIt(list []string) {
+func (q *Quicker) SortIt(list []string) {
     q.quickSort(list, 0, len(list)-1)
 }
 
-func NewQuick() *Quick {
-    return &Quick{}
+func NewQuicker() *Quicker {
+    return &Quicker{}
 }
