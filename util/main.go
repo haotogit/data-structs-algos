@@ -3,16 +3,15 @@ package util
 import (
     "math/rand"
     "time"
-    //"strconv"
 )
 
-func GetRandIntn(max int) int {
+func GetRandIntn(min, max int) int {
     if max == 0 {
         return max
     }
 
     rand.Seed(time.Now().UnixNano())
-    return rand.Intn(max)
+    return rand.Intn(max-min) + min
 }
 
 func IsNil(el interface{}) bool {

@@ -31,7 +31,7 @@ func (g *Grid) SetCells() {
 
 func (g *Grid) MineCells(nMines int) {
     for nMines > 0 {
-        randInt := util.GetRandIntn(g.width*g.height)
+        randInt := util.GetRandIntn(0, g.width*g.height)
         randX := randInt/g.width
         randY := randInt%g.height
         g.Rows[randX][randY].PlantMine()

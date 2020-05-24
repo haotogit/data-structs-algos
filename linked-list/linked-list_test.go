@@ -11,7 +11,7 @@ func makeLinkedList(withSize int, fill bool) (*LinkedList, int) {
     if withSize > 0 {
         currSize = withSize
     } else {
-        currSize = util.GetRandIntn(100) + 25
+        currSize = util.GetRandIntn(0, 100) + 25
     }
 
     newList := NewLinkedList()
@@ -74,7 +74,7 @@ func TestGetNth(t *testing.T) {
             actualSize--
         }
 
-        randIdx := util.GetRandIntn(actualSize)
+        randIdx := util.GetRandIntn(0, actualSize)
         currItem := newList.GetNth(randIdx)
         target := newList.Head
         for target != nil && randIdx > 0 && target.next != nil {
@@ -93,7 +93,7 @@ func TestInsertBefore(t *testing.T) {
     var prev, next *Node
     for iterations := 0; iterations < 100; iterations++ {
         newList, _ := makeLinkedList(0, true)
-        randIdx := util.GetRandIntn(newList.Size())
+        randIdx := util.GetRandIntn(0, newList.Size())
 
         if newList.InsertBefore(randIdx, 50*randIdx) {
             if randIdx > 0 {
@@ -141,7 +141,7 @@ func getDerivedVal(el interface{}) interface{} {
 func TestSet(t *testing.T) {
     for iterations := 1; iterations <= 100; iterations++ {
         newList, _ := makeLinkedList(0, true)
-        randIdx := util.GetRandIntn(newList.Size()-1)
+        randIdx := util.GetRandIntn(0, newList.Size()-1)
         currNode := newList.GetNth(randIdx)
         newVal := getDerivedVal(currNode.Data)
         oldVal := newList.Set(randIdx, newVal)
@@ -157,7 +157,7 @@ func TestRemove(t *testing.T) {
         newList, _ := makeLinkedList(0, true)
         oldSize := newList.Size()
         for removals := 0; removals <= newList.Size()/2; removals++ {
-            randIdx := util.GetRandIntn(oldSize-1)
+            randIdx := util.GetRandIntn(0, oldSize-1)
             currNode := newList.GetNth(randIdx)
 
             removedItem := newList.Remove(randIdx)

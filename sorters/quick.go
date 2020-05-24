@@ -1,32 +1,34 @@
 package sorters
 
-//import "fmt"
+import "../util"
 
 type Quick struct {}
 
+func (q *Quick) randPivotPart(list []string, first, last int) int {
+    randn := util.GetRandIntn(first, last)
+    tmp := list[randn]
+    list[randn] = list[first]
+    list[first] = tmp
+
+    return q.partition(list, first, last)
+}
+
 func (q *Quick) partition(list []string, first, last int) int {
-    pivIdx := first
-    pivItem := list[pivIdx]
+    pivItem := list[first]
     left := first
     right := last+1
 
     for {
         // find leftItem > pivItem
         left++
-        for left <= last && list[left] < pivItem {
+        for left < right && list[left] < pivItem {
             left++
-            if left == last {
-                break
-            }
         }
 
         // find rightItem < pivItem
         right--
-        for right >= first && list[right] > pivItem {
+        for right >= left && list[right] > pivItem {
             right--
-            if right == first {
-                break
-            }
         }
 
         if left >= right {
@@ -38,7 +40,7 @@ func (q *Quick) partition(list []string, first, last int) int {
         list[right] = tmp
     }
 
-    list[pivIdx] = list[right]
+    list[first] = list[right]
     list[right] = pivItem
     return right
 }

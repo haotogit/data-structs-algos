@@ -15,8 +15,8 @@ const (
     document = "random-strings.txt"
     startQty = 5000
     incBy = 10000
-    iterations = 10
-    sortAlg = 0
+    iterations = 5 
+    sortAlg = 4
     sortBy = ""
     sortDesc = true
 )
@@ -66,9 +66,6 @@ func TestSort(t *testing.T) {
         sort.Strings(proof)
         startTime := time.Now()
         currSort.SortIt(toSort)
-        //fmt.Printf("tosort %+v\n", toSort)
-        //fmt.Println("")
-        //fmt.Printf("proof %+v\n", proof)
         endTime := time.Now()
         elapsed := endTime.Sub(startTime)
         if !reflect.DeepEqual(toSort, proof) {

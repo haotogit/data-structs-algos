@@ -7,7 +7,7 @@ import (
 )
 
 func makeTestGrid(size int) *Grid {
-    randSize := util.GetRandIntn(size)+20
+    randSize := util.GetRandIntn(0, size)+20
     randNmines := randSize
     return NewGrid(randSize, randNmines)
 }
@@ -48,7 +48,7 @@ func TestBFS(t *testing.T) {
     for iterations := 0; iterations < 100; iterations++ {
         var currCell, papaCell *Cell
         newGrid = makeTestGrid(iterations+20)
-        randInt := util.GetRandIntn(newGrid.width*newGrid.height)
+        randInt := util.GetRandIntn(0, newGrid.width*newGrid.height)
         randX := randInt/newGrid.width
         randY := randInt%newGrid.height
         resultQ := newGrid.BFS(randX, randY)
@@ -101,31 +101,3 @@ func checkVisited(t *testing.T, resultQ *queue.Queue) {
         resultQ.Enqueue(currCell)
     }
 }
-
-// to test:
-// 1. each cell only visited once
-// 2. order of traversal
-//func TestDFS(t *testing.T) {
-//    var newGrid *Grid
-//    for iterations := 0; iterations < 10; iterations++ {
-//        //var currCell, papaCell *Cell
-//        var papaCell, currCell *Cell
-//        newGrid = makeTestGrid(iterations+20)
-//        randInt := util.GetRandIntn(newGrid.width*newGrid.height)
-//        randX := randInt/newGrid.width
-//        randY := randInt%newGrid.height
-//        resultQ := newGrid.DFS(randX, randY, nil)
-//        
-//        if resultQ != nil && resultQ.Size() > 1 {
-//            for resultQ.Size() != 0 {
-//                papaCell = resultQ.Dequeue().(*Cell)
-//                currCell = resultQ.Dequeue().(*Cell)
-//
-//                if (papaCell.x-1 != currCell.x || papaCell.x+1 != currCell.x) &&
-//                    (papaCell.y-1 != currCell.y || papaCell.y+1 != currCell.y) {
-//                    t.Errorf("fuckedup papa %+v curr %+v\n", papaCell, currCell)
-//                }
-//            }
-//        }
-//    }
-//}

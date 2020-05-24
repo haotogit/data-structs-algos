@@ -169,11 +169,11 @@ func (l *LinkedList) FillList(size int) {
     if size > 0 {
         withSize = size 
     } else {
-        withSize = util.GetRandIntn(100) + 25
+        withSize = util.GetRandIntn(0, 100) + 25
     }
 
     for withSize > 0 {
-        l.Add(util.GetRandIntn(1000)+15)
+        l.Add(util.GetRandIntn(0, 1000)+15)
         withSize--
     }
 }

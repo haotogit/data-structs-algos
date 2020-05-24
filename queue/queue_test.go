@@ -9,7 +9,7 @@ func TestEnqueue(t *testing.T) {
     for iterations := 0; iterations < 50; iterations++ {
         newQ := NewQ(10)
         for loops := 0; loops < 10; loops++ {
-            random := util.GetRandIntn(loops*3)
+            random := util.GetRandIntn(0, loops*3)
             oldSize := newQ.Size()
             if newQ.Enqueue(random) {
                 lastItem := newQ.items.PeekBack()
