@@ -2,7 +2,7 @@ package sorters
 
 type Merger struct {}
 
-func merge(list []string) {
+func (m *Merger) merge(list []string) {
     mid := len(list)/2
 
     leftIdx := 0
@@ -33,17 +33,13 @@ func merge(list []string) {
     }
 }
 
-func mergeSort(list []string) {
+func (m *Merger) SortIt(list []string) {
     mid := (len(list)/2)
     if mid > 0 {
-        mergeSort(list[:mid])
-        mergeSort(list[mid:])
-        merge(list)
+        m.SortIt(list[:mid])
+        m.SortIt(list[mid:])
+        m.merge(list)
     }
-}
-
-func (m *Merger) SortIt(list []string) {
-    mergeSort(list)
 }
 
 func NewMerger() *Merger {

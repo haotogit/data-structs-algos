@@ -11,7 +11,7 @@ var AlgMap = map[int]string{
     2: "Selection",
     3: "Merge",
     4: "Quick",
-    5: "Heap",
+    5: "HeapSort",
 }
 
 func SortererCriador(sortAlg int) SortMaquina {
@@ -24,6 +24,8 @@ func SortererCriador(sortAlg int) SortMaquina {
             return NewSelectioner()
         case 3:
             return NewMerger()
+        case 4:
+            return NewQuick()
     }
 
     return  nil

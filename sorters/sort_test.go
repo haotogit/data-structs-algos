@@ -12,10 +12,10 @@ import (
 )
 
 const (
-    document = "small-wordlist.txt"
-    startQty = 10000
+    document = "random-strings.txt"
+    startQty = 5000
     incBy = 10000
-    iterations = 5
+    iterations = 10
     sortAlg = 0
     sortBy = ""
     sortDesc = true
@@ -66,13 +66,31 @@ func TestSort(t *testing.T) {
         sort.Strings(proof)
         startTime := time.Now()
         currSort.SortIt(toSort)
+        //fmt.Printf("tosort %+v\n", toSort)
+        //fmt.Println("")
+        //fmt.Printf("proof %+v\n", proof)
         endTime := time.Now()
         elapsed := endTime.Sub(startTime)
-        fmt.Printf("%d: Sorted %d items in %d ms\n", i+1, len(toSort), elapsed.Milliseconds())
         if !reflect.DeepEqual(toSort, proof) {
             t.Errorf("Did not sort correctly")
         }
+        fmt.Printf("%d: Sorted %d items in %d ms\n", i+1, len(toSort), elapsed.Milliseconds())
         fmt.Println("<<<<<<<<<<<<<<<<<<<<< ================== >>>>>>>>>>>>>>>>>>>>>")
+    }
+}
+
+func BenchmarkSort(b *testing.B) {
+    for i := 0; i < iterationsFlag; i++ {
+        b.StopTimer()
+        currSort := SortererCriador(sortAlgFlag)
+        toSort, proof := obterItens(docFlag, startQty+(incByFlag*i))
+        sort.Strings(proof)
+        b.StartTimer()
+        currSort.SortIt(toSort)
+        b.StopTimer()
+        if !reflect.DeepEqual(toSort, proof) {
+            b.Errorf("Did not sort correctly")
+        }
     }
 }
 
