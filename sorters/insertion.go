@@ -1,7 +1,7 @@
 package sorters
 
 import (
-    "strings"
+    "../util"
 )
 
 type Insertioner struct {}
@@ -9,14 +9,14 @@ type Insertioner struct {}
     //sortBy string
     //sortDesc bool
 
-func (in *Insertioner) SortIt(list []string) {
+func (in *Insertioner) SortIt(list []interface{}) {
     for x := 1; x < len(list); x++ {
         y := x
         tmp := list[y]
         // if prevNode is is greater than nextNode
         // set nextNode to previous consecutively
         // until no more previous
-        for ; y > 0 && strings.Compare(list[y-1], tmp) == 1; y-- {
+        for ; y > 0 && util.ElComparer(list[y-1], tmp) == 1; y-- {
             list[y] = list[y-1]
         }
 

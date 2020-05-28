@@ -28,16 +28,32 @@ func IsNil(el interface{}) bool {
     return nilVal == el
 }
 
-func GetUnderType(el interface{}) interface{} {
+func ElComparer(el, el1 interface{}) int {
+    compareVal := 0
     switch el.(type) {
         case string:
-            return el.(string)
+            elTyped := el.(string)
+            el1Typed := el1.(string)
+            if elTyped > el1Typed {
+                compareVal = 1
+            } else if elTyped < el1Typed {
+                compareVal = - 1
+            }
         case int:
-            return el.(int)
-        default:
-            return el.(string)
+            elTyped := el.(int)
+            el1Typed := el1.(int)
+            if elTyped > el1Typed {
+                compareVal = 1
+            } else if elTyped < el1Typed {
+                compareVal = - 1
+            }
+            //elTyped = el.(int)
+
+        //default:
+        //    elTyped := el.(*Objecto)
+        //    fmt.Printf("%+v", elTyped)
     }
 
-    return el.(string)
+    return compareVal
 }
 

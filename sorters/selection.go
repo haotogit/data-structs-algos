@@ -1,17 +1,17 @@
 package sorters
 
 import (
-    "strings"
+    "../util"
 )
 
 type Selectioner struct {}
 
-func (s *Selectioner) SortIt(list []string) {
+func (s *Selectioner) SortIt(list []interface{}) {
     for cursor := 0; cursor < len(list); cursor++ {
         low := list[cursor]
         prevIdx := cursor
         for x := cursor+1; x < len(list); x++ {
-            if strings.Compare(list[x], low) == - 1 {
+            if util.ElComparer(list[x], low) == - 1 {
                 low = list[x]
                 prevIdx = x
             }

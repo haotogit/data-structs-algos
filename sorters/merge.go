@@ -1,17 +1,20 @@
 package sorters
 
+import "../util"
+
 type Merger struct {}
 
-func (m *Merger) merge(list []string) {
+func (m *Merger) merge(list []interface{}) {
     mid := len(list)/2
 
     leftIdx := 0
     rightIdx := mid
-    tmpList := append([]string{}, list...)
+    tmpList := make([]interface{}, len(list))
+    copy(tmpList, list)
 
     k := 0
     for ; leftIdx < mid && rightIdx < len(list); k++ {
-        if tmpList[leftIdx] < tmpList[rightIdx] {
+        if util.ElComparer(tmpList[leftIdx], tmpList[rightIdx]) == - 1 {
             list[k] = tmpList[leftIdx]
             leftIdx++
         } else {
@@ -33,7 +36,7 @@ func (m *Merger) merge(list []string) {
     }
 }
 
-func (m *Merger) SortIt(list []string) {
+func (m *Merger) SortIt(list []interface{}) {
     mid := (len(list)/2)
     if mid > 0 {
         m.SortIt(list[:mid])

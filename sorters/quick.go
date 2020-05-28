@@ -1,8 +1,16 @@
 package sorters
 
+import "../util"
+
+type QuickerMaquina interface {
+    SortMaquina
+    partition(list []interface{}, first, last int) int
+    quickSort(list []interface{}, first, last int)
+}
+
 type Quicker struct {}
 
-func (q *Quicker) partition(list []string, first, last int) int {
+func (q *Quicker) partition(list []interface{}, first, last int) int {
     pivIdx := last
     pivItem := list[pivIdx]
     // last as pivot first-1, first as pivot last+1
@@ -12,13 +20,13 @@ func (q *Quicker) partition(list []string, first, last int) int {
     for {
         // find leftItem > pivItem
         left++
-        for left < right && list[left] < pivItem {
+        for left < right && util.ElComparer(list[left], pivItem) == -1 {
             left++
         }
 
         // find rightItem < pivItem
         right--
-        for right > left && list[right] > pivItem {
+        for right > left && util.ElComparer(list[right], pivItem) == 1 {
             right--
         }
 
@@ -38,7 +46,7 @@ func (q *Quicker) partition(list []string, first, last int) int {
     return left
 }
 
-func (q *Quicker) quickSort(list []string, first, last int) {
+func (q *Quicker) quickSort(list []interface{}, first, last int) {
     if first < last {
         piv := q.partition(list, first, last)
         q.quickSort(list, first, piv-1)
@@ -46,7 +54,7 @@ func (q *Quicker) quickSort(list []string, first, last int) {
     }
 }
 
-func (q *Quicker) SortIt(list []string) {
+func (q *Quicker) SortIt(list []interface{}) {
     q.quickSort(list, 0, len(list)-1)
 }
 
