@@ -1,30 +1,35 @@
 package sorters
 
 import (
-    "../util"
+	"../util"
 )
 
-type Insertioner struct {}
-    // TODO
-    //sortBy string
-    //sortDesc bool
+type Insertioner struct{}
 
-func (in *Insertioner) SortIt(list []interface{}) {
-    for x := 1; x < len(list); x++ {
-        y := x
-        tmp := list[y]
-        // if prevNode is is greater than nextNode
-        // set nextNode to previous consecutively
-        // until no more previous
-        for ; y > 0 && util.ElComparer(list[y-1], tmp) == 1; y-- {
-            list[y] = list[y-1]
-        }
+// TODO
+//sortBy string
+//sortDesc bool
 
-        // then set original next node to before since it was lesser
-        list[y] = tmp
-    }
+func (in *Insertioner) Sort(list []interface{}) {
+	for x := 1; x < len(list); x++ {
+		y := x
+		tmp := list[y]
+		// if prevNode is is greater than nextNode
+		// set nextNode to previous consecutively
+		// until no more previous
+		for ; y > 0 && in.less(list[y-1], tmp); y-- {
+			list[y] = list[y-1]
+		}
+
+		// then set original next node to before since it was lesser
+		list[y] = tmp
+	}
 }
 
-func NewInsertioner() *Insertioner {
-    return &Insertioner {}
+func (in *Insertioner) less(a, b interface{}) bool {
+	return util.ElComparer(a, b) == -1
+}
+
+func NewInsertioner() SortMaquina {
+	return &Insertioner{}
 }
