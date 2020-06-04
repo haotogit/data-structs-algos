@@ -46,18 +46,25 @@ func (h Heap) heepify(list []interface{}, k, lim int) {
 // build minHeap for desc
 // build maxHeap for asc
 func (h Heap) getHiLo(list []interface{}, k, lim int) int {
-	var dest int
-	if !h.isMax {
-		dest = k * 2
-		if dest >= lim {
-			return k
-		}
+	dest := k * 2
+	if dest >= lim {
+		return k
+	}
 
+	if !h.isMax {
 		if dest+1 < lim && h.less(list[dest+1], list[dest]) {
 			dest++
 		}
 
 		if h.less(list[k], list[dest]) {
+			dest = k
+		}
+	} else {
+		if dest+1 < lim && h.less(list[dest], list[dest+1]) {
+			dest++
+		}
+
+		if h.less(list[dest], list[k]) {
 			dest = k
 		}
 	}

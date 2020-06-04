@@ -85,7 +85,7 @@ func BenchmarkSort(b *testing.B) {
 	for i := 0; i < iterationsFlag; i++ {
 		currSort := sortCriador(sortAlgFlag)
 		toSort, proof := obterItens(startQty + (incByFlag * i))
-		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == -1 })
+		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == 1 })
 		b.StartTimer()
 		currSort.Sort(toSort)
 		b.StopTimer()
