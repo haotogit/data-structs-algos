@@ -15,7 +15,7 @@ const (
 	document   = "random-strings.txt"
 	startQty   = 5000
 	incBy      = 10000
-	iterations = 10
+	iterations = 5
 	sortAlg    = 4
 	sortBy     = ""
 	sortDesc   = true
@@ -26,6 +26,14 @@ var sortByFlag, typeFlag string
 var startQtyFlag, incByFlag int
 var sortAlgFlag, iterationsFlag int
 var sortDescFlag bool
+var AlgMap = map[int]string{
+	0: "Bubble",
+	1: "Selection",
+	2: "Insertion",
+	3: "Merge",
+	4: "Quick",
+	5: "HeapSort",
+}
 
 func obterItens(qty int) ([]interface{}, []interface{}) {
 	var list, proofList []interface{}
@@ -57,8 +65,8 @@ func obterItens(qty int) ([]interface{}, []interface{}) {
 func TestSort(t *testing.T) {
 	fmt.Printf("Sorting %ss with sortAlg: %s\n", typeFlag, AlgMap[sortAlgFlag])
 	for i := 0; i < iterationsFlag; i++ {
-		currSort := SortererCriador(sortAlgFlag)
 		toSort, proof := obterItens(startQty + (incByFlag * i))
+		currSort := sortCriador(sortAlgFlag)
 		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == 1 })
 		startTime := time.Now()
 		currSort.Sort(toSort)
@@ -75,7 +83,7 @@ func TestSort(t *testing.T) {
 func BenchmarkSort(b *testing.B) {
 	b.StopTimer()
 	for i := 0; i < iterationsFlag; i++ {
-		currSort := SortererCriador(sortAlgFlag)
+		currSort := sortCriador(sortAlgFlag)
 		toSort, proof := obterItens(startQty + (incByFlag * i))
 		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == -1 })
 		b.StartTimer()
