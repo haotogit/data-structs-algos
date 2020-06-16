@@ -4,7 +4,6 @@ import (
 	"../util"
 	"flag"
 	"fmt"
-	"math/rand"
 	"reflect"
 	"sort"
 	"testing"
@@ -35,39 +34,14 @@ var AlgMap = map[int]string{
 	5: "HeapSort",
 }
 
-func obterItens(qty int) ([]interface{}, []interface{}) {
-	var list, proofList []interface{}
-
-	if typeFlag == "string" {
-		for qty > 0 {
-			currLen := util.GetRandIntn(1, 12)
-			bytes := make([]byte, currLen)
-			for i := 0; i < currLen; i++ {
-				bytes[i] = byte(util.GetRandIntn(48, 122))
-			}
-
-			currStr := string(bytes)
-			list = append(list, currStr)
-			qty--
-		}
-	} else {
-		rand.Seed(time.Now().UnixNano())
-		tmp := rand.Perm(qty)
-		for i := 0; i < qty; i++ {
-			list = append(list, tmp[i]*i+1)
-		}
-	}
-
-	proofList = append(proofList, list...)
-	return list, proofList
-}
-
 func TestSort(t *testing.T) {
+	var proof []interface{}
 	fmt.Printf("Sorting %ss with sortAlg: %s\n", typeFlag, AlgMap[sortAlgFlag])
 	for i := 0; i < iterationsFlag; i++ {
-		toSort, proof := obterItens(startQty + (incByFlag * i))
+		toSort := util.ObterItens(startQty+(incByFlag*i), sortType)
+		proof := append(proof, toSort...)
 		currSort := sortCriador(sortAlgFlag)
-		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == 1 })
+		sort.Slice(proof, func(i, j int) bool { return util.Greater(proof[i], proof[j]) == 1 })
 		startTime := time.Now()
 		currSort.Sort(toSort)
 		endTime := time.Now()
@@ -81,11 +55,13 @@ func TestSort(t *testing.T) {
 }
 
 func BenchmarkSort(b *testing.B) {
+	var proof []interface{}
 	b.StopTimer()
 	for i := 0; i < iterationsFlag; i++ {
 		currSort := sortCriador(sortAlgFlag)
-		toSort, proof := obterItens(startQty + (incByFlag * i))
-		sort.Slice(proof, func(i, j int) bool { return util.ElComparer(proof[i], proof[j]) == 1 })
+		toSort := util.ObterItens(startQty+(incByFlag*i), sortType)
+		proof := append(proof, toSort...)
+		sort.Slice(proof, func(i, j int) bool { return util.Greater(proof[i], proof[j]) == 1 })
 		b.StartTimer()
 		currSort.Sort(toSort)
 		b.StopTimer()

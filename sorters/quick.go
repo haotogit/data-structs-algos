@@ -58,7 +58,7 @@ func (q *Quicker) Sort(list []interface{}) {
 }
 
 func (q Quicker) less(a, b interface{}) bool {
-	return util.ElComparer(a, b) == -1
+	return util.Greater(a, b) == -1
 }
 
 func NewQuicker() SortMaquina {

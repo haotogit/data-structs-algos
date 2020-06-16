@@ -24,7 +24,7 @@ func (s *Selectioner) Sort(list []interface{}) {
 }
 
 func (s Selectioner) less(a, b interface{}) bool {
-	return util.ElComparer(a, b) == -1
+	return util.Greater(a, b) == -1
 }
 
 func NewSelectioner() SortMaquina {

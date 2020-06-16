@@ -2,6 +2,7 @@ package util
 
 import (
 	"math/rand"
+	"reflect"
 	"time"
 )
 
@@ -15,20 +16,20 @@ func GetRandIntn(min, max int) int {
 }
 
 func IsNil(el interface{}) bool {
-	var nilVal interface{}
+	var nilVal bool
 	switch el.(type) {
 	case string:
-		nilVal = ""
+		nilVal = "" == el.(string)
 	case int:
-		nilVal = 0
-	default:
-		nilVal = nil
+		nilVal = 0 == el.(int)
+	case uint32:
+		nilVal = 0 == el.(uint32)
 	}
 
-	return nilVal == el
+	return nilVal
 }
 
-func ElComparer(el, el1 interface{}) int {
+func Greater(el, el1 interface{}) int {
 	compareVal := 0
 	switch el.(type) {
 	case string:
@@ -47,7 +48,44 @@ func ElComparer(el, el1 interface{}) int {
 		} else if elTyped < el1Typed {
 			compareVal = -1
 		}
+	case uint32:
+		elTyped := el.(uint32)
+		el1Typed := el1.(uint32)
+		if elTyped > el1Typed {
+			compareVal = 1
+		} else if elTyped < el1Typed {
+			compareVal = -1
+		}
 	}
 
 	return compareVal
+}
+
+func ObterItens(qty int, typeFlag string) []interface{} {
+	var list []interface{}
+	if typeFlag == "string" {
+		for qty > 0 {
+			currLen := GetRandIntn(1, 12)
+			bytes := make([]byte, currLen)
+			for i := 0; i < currLen; i++ {
+				bytes[i] = byte(GetRandIntn(48, 122))
+			}
+
+			currStr := string(bytes)
+			list = append(list, currStr)
+			qty--
+		}
+	} else {
+		rand.Seed(time.Now().UnixNano())
+		tmp := rand.Perm(qty)
+		for i := 0; i < qty; i++ {
+			list = append(list, tmp[i]*(i+1)*2)
+		}
+	}
+
+	return list
+}
+
+func GetType(el interface{}) string {
+	return reflect.TypeOf(el).String()
 }

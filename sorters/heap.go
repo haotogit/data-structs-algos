@@ -73,7 +73,7 @@ func (h Heap) getHiLo(list []interface{}, k, lim int) int {
 }
 
 func (h Heap) less(a, b interface{}) bool {
-	return util.ElComparer(a, b) == -1
+	return util.Greater(a, b) == -1
 }
 
 func (h Heap) swap(list []interface{}, i, j int) {

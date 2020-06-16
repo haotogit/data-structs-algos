@@ -46,7 +46,7 @@ func (m *Merger) Sort(list []interface{}) {
 }
 
 func (m Merger) less(a, b interface{}) bool {
-	return util.ElComparer(a, b) == -1
+	return util.Greater(a, b) == -1
 }
 
 func NewMerger() SortMaquina {

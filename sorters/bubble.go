@@ -25,7 +25,7 @@ func (b *Bubbler) Sort(list []interface{}) {
 }
 
 func (b Bubbler) less(a, bb interface{}) bool {
-	return util.ElComparer(a, bb) == -1
+	return util.Greater(a, bb) == -1
 }
 
 func NewBubbler() SortMaquina {

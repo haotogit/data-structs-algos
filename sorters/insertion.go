@@ -27,7 +27,7 @@ func (in *Insertioner) Sort(list []interface{}) {
 }
 
 func (in *Insertioner) less(a, b interface{}) bool {
-	return util.ElComparer(a, b) == -1
+	return util.Greater(a, b) == -1
 }
 
 func NewInsertioner() SortMaquina {
