@@ -61,6 +61,17 @@ func Greater(el, el1 interface{}) int {
 	return compareVal
 }
 
+func inList(el interface{}, list []interface{}) bool {
+	hasItem := false
+	for _, v := range list {
+		if Greater(el, v) == 0 {
+			hasItem = true
+		}
+	}
+
+	return hasItem
+}
+
 func ObterItens(qty int, typeFlag string) []interface{} {
 	var list []interface{}
 	if typeFlag == "string" {
@@ -79,7 +90,11 @@ func ObterItens(qty int, typeFlag string) []interface{} {
 		rand.Seed(time.Now().UnixNano())
 		tmp := rand.Perm(qty)
 		for i := 0; i < qty; i++ {
-			list = append(list, tmp[i]*(i+1)*2)
+			currItem := (tmp[i] + 1) * (i + 1)
+
+			if dupe := inList(currItem, list); !dupe {
+				list = append(list, currItem)
+			}
 		}
 	}
 
@@ -88,4 +103,12 @@ func ObterItens(qty int, typeFlag string) []interface{} {
 
 func GetType(el interface{}) string {
 	return reflect.TypeOf(el).String()
+}
+
+func GetGreatest(a, b int) int {
+	if a > b {
+		return a
+	} else {
+		return b
+	}
 }

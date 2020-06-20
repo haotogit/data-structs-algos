@@ -14,6 +14,8 @@ type btNode struct {
 
 type binTreee interface {
 	Insert(currNode *btNode) bool
+	Height() int
+	Search(x interface{}) interface{}
 	add(currRoot, currNode *btNode) btNode
 	addAll(list []interface{})
 	checkBST(currNode *btNode, min, max uint32) bool
@@ -56,6 +58,29 @@ func (bt *binTree) add(currRoot, freshNode *btNode) *btNode {
 	return currRoot
 }
 
+func (bt binTree) Height(currNode *btNode) int {
+	if currNode == nil {
+		return -1
+	}
+
+	return 1 + util.GetGreatest(bt.Height(currNode.left), bt.Height(currNode.right))
+}
+
+func (bt *binTree) Search(curr *btNode, x interface{}) interface{} {
+	if util.IsNil(x) {
+		return 0
+	}
+
+	compared := util.Greater(uint32(x.(int)), curr.key)
+	if compared == 0 {
+		return curr.val
+	} else if compared == 1 {
+		return bt.Search(curr.right, x)
+	} else {
+		return bt.Search(curr.left, x)
+	}
+}
+
 func (bt *binTree) addAll(list []interface{}) {
 	for _, item := range list {
 		bt.Insert(item)
@@ -89,7 +114,7 @@ func size(currNode *btNode) int {
 
 func (bt binTree) newNode(item interface{}) *btNode {
 	var currKey uint32
-	// todo fix this
+	// TODO fix this
 	if util.GetType(item) == "string" {
 		currKey = uint32(bt.root.size + 1)
 	} else {

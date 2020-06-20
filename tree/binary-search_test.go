@@ -19,3 +19,28 @@ func TestInsert(t *testing.T) {
 		}
 	}
 }
+
+func TestSize(t *testing.T) {
+	for i := 0; i < 50; i++ {
+		list := util.ObterItens(50, "int")
+		totalSize := len(list)
+		newTree := NewTree(list)
+		if totalSize != newTree.root.size {
+			t.Errorf("Incorrect tree size expected %d, but got %d", totalSize, newTree.root.size)
+		}
+	}
+}
+
+func TestSearch(t *testing.T) {
+	list := util.ObterItens(100, "int")
+	newTree := NewTree(list)
+
+	for i := 0; i < len(list); i += 5 {
+		curr := list[i]
+		found := newTree.Search(newTree.root, curr).(int)
+
+		if curr != found {
+			t.Errorf("Found wrong item expected %d but got %d", curr, found)
+		}
+	}
+}
