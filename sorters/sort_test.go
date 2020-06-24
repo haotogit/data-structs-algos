@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	document   = "random-strings.txt"
 	startQty   = 5000
 	incBy      = 10000
 	iterations = 5

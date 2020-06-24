@@ -7,10 +7,10 @@ import (
 // parent k/2
 // left 2k
 // right 2k+1
-type HeapMaquina interface {
+type HeapMachina interface {
+	SortMachina
 	sink(k int)
 	swap(a, b interface{})
-	less(a, b interface{}) bool
 }
 
 type Heap struct {
@@ -82,6 +82,6 @@ func (h Heap) swap(list []interface{}, i, j int) {
 	list[j] = tmp
 }
 
-func NewHeaper(isMax bool) SortMaquina {
+func NewHeaper(isMax bool) *Heap {
 	return &Heap{isMax}
 }

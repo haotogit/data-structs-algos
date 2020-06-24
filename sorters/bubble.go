@@ -28,6 +28,6 @@ func (b Bubbler) less(a, bb interface{}) bool {
 	return util.Greater(a, bb) == -1
 }
 
-func NewBubbler() SortMaquina {
+func NewBubbler() SortMachina {
 	return &Bubbler{}
 }

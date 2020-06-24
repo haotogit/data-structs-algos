@@ -49,6 +49,6 @@ func (m Merger) less(a, b interface{}) bool {
 	return util.Greater(a, b) == -1
 }
 
-func NewMerger() SortMaquina {
+func NewMerger() SortMachina {
 	return &Merger{}
 }

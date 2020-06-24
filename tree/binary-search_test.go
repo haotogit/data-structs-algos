@@ -6,8 +6,9 @@ import (
 )
 
 func TestInsert(t *testing.T) {
-	list := util.ObterItens(100, "int")
+	var list []interface{}
 	newTree := NewTree(list)
+	list = util.ObterItens(100, "int")
 
 	for i, v := range list {
 		if i > 0 && !checkBST(newTree.root, 0, 0) {
@@ -37,10 +38,33 @@ func TestSearch(t *testing.T) {
 
 	for i := 0; i < len(list); i += 5 {
 		curr := list[i]
-		found := newTree.Search(newTree.root, curr).(int)
+		found := newTree.Search(newTree.root, curr).val.(int)
 
 		if curr != found {
 			t.Errorf("Found wrong item expected %d but got %d", curr, found)
+		}
+	}
+}
+
+func TestDelete(t *testing.T) {
+	list := util.ObterItens(100, "int")
+	newTree := NewTree(list)
+
+	for i := 0; i < len(list); i += 10 {
+		prevSize := newTree.root.size
+		newTree.Delete(list[i])
+		found := newTree.Search(newTree.root, list[i])
+
+		if prevSize == newTree.root.size {
+			t.Errorf("Incorrect size after deletion, expected %d, but got %d", prevSize-1, newTree.root.size)
+		}
+
+		if found != nil {
+			t.Errorf("Did not delete %d from tree", list[i])
+		}
+
+		if !checkBST(newTree.root, 0, 0) {
+			t.Errorf("Invalid bst structure after deletion of %d", list[i])
 		}
 	}
 }

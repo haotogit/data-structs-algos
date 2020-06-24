@@ -27,6 +27,6 @@ func (s Selectioner) less(a, b interface{}) bool {
 	return util.Greater(a, b) == -1
 }
 
-func NewSelectioner() SortMaquina {
+func NewSelectioner() SortMachina {
 	return &Selectioner{}
 }

@@ -30,6 +30,6 @@ func (in *Insertioner) less(a, b interface{}) bool {
 	return util.Greater(a, b) == -1
 }
 
-func NewInsertioner() SortMaquina {
+func NewInsertioner() SortMachina {
 	return &Insertioner{}
 }

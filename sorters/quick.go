@@ -2,7 +2,8 @@ package sorters
 
 import "../util"
 
-type QuickerMaquina interface {
+type QuickerMachina interface {
+	SortMachina
 	partition(list []interface{}, first, last int) int
 	quickSort(list []interface{}, first, last int)
 }
@@ -61,6 +62,6 @@ func (q Quicker) less(a, b interface{}) bool {
 	return util.Greater(a, b) == -1
 }
 
-func NewQuicker() SortMaquina {
+func NewQuicker() *Quicker {
 	return &Quicker{}
 }
