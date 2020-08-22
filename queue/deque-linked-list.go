@@ -4,8 +4,8 @@ package queue
 // when add, rm, or get in not head or tail of list,
 // it's an O(currIndex) opposed to indexed array
 import (
-    "../linked-list"
-    "../util"
+    "github.com/haotogit/data-structs-algos/linked-list"
+    "github.com/haotogit/data-structs-algos/util"
 )
 
 type MyDeqLL interface {

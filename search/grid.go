@@ -1,8 +1,8 @@
 package search
 
 import (
-    "../util"
-    "../queue"
+    "github.com/haotogit/data-structs-algos/util"
+    "github.com/haotogit/data-structs-algos/queue"
 )
 
 type Gridd interface {

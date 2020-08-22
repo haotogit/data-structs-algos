@@ -1,7 +1,7 @@
 package binTree
 
 import (
-	"../util"
+	"github.com/haotogit/data-structs-algos/util"
 	"testing"
 )
 

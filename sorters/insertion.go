@@ -1,7 +1,7 @@
 package sorters
 
 import (
-	"../util"
+	"github.com/haotogit/data-structs-algos/util"
 )
 
 type Insertioner struct{}

@@ -1,6 +1,6 @@
 package sorters
 
-import "../util"
+import "github.com/haotogit/data-structs-algos/util"
 
 type QuickerMachina interface {
 	SortMachina

@@ -1,7 +1,7 @@
 package queue
 
 import (
-    "../util"
+    "github.com/haotogit/data-structs-algos/util"
 )
 
 type MyDeq interface {

@@ -2,8 +2,8 @@ package search
 
 import (
     "testing"
-    "../util"
-    "../queue"
+    "github.com/haotogit/data-structs-algos/util"
+    "github.com/haotogit/data-structs-algos/queue"
 )
 
 func makeTestGrid(size int) *Grid {

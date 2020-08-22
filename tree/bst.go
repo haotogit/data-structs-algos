@@ -1,8 +1,8 @@
 package binTree
 
 import (
-	"../queue"
-	"../util"
+	"github.com/haotogit/data-structs-algos/queue"
+	"github.com/haotogit/data-structs-algos/util"
 	"fmt"
 )
 

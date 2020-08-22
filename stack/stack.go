@@ -1,7 +1,7 @@
 package stack
 
 import (
-    "../queue"
+    "github.com/haotogit/data-structs-algos/queue"
 )
 
 type MyStack interface {

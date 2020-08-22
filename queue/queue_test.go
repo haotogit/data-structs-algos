@@ -2,7 +2,7 @@ package queue
 
 import (
     "testing"
-    "../util"
+    "github.com/haotogit/data-structs-algos/util"
 )
 
 func TestEnqueue(t *testing.T) {

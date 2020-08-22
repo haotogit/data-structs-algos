@@ -2,7 +2,7 @@ package linkedList
 
 import (
     "testing"
-    "../util"
+    "github.com/haotogit/data-structs-algos/util"
 )
 
 func makeLinkedList(withSize int, fill bool) (*LinkedList, int) {

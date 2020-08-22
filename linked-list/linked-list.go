@@ -1,7 +1,7 @@
 package linkedList
 
 import (
-    "../util"
+    "github.com/haotogit/data-structs-algos/util"
 )
 
 type MyLinkedList interface {
